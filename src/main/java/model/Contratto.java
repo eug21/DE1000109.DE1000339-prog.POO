@@ -1,11 +1,12 @@
 package model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.math.BigDecimal;
 
 public class Contratto {
     private String idFilialeRitiro, idFilialeConsegna;
     private LocalDate dataInizio, dataFine;
-    private float prezzo;
+    private BigDecimal prezzo;
 
     public String getIdFilialeRitiro() {
         return idFilialeRitiro;
@@ -39,15 +40,15 @@ public class Contratto {
         this.dataFine = dataFine;
     }
 
-    public float getPrezzo() {
+    public BigDecimal getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(float prezzo) {
+    public void setPrezzo(BigDecimal prezzo) {
         this.prezzo = prezzo;
     }
 
-    public Contratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, float prezzo) {
+    public Contratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo) {
         this.idFilialeRitiro = idFilialeRitiro;
         this.idFilialeConsegna = idFilialeConsegna;
         this.dataInizio = dataInizio;
@@ -57,7 +58,7 @@ public class Contratto {
 
     //verifico che i dati del contratto non siano vuoti
     public boolean verificaDatiContratto(){
-        return this.dataFine != null && this.dataInizio != null && this.idFilialeConsegna != null && this.idFilialeRitiro != null && this.prezzo != 0f;
+        return this.dataFine != null && this.dataInizio != null && this.idFilialeConsegna != null && this.idFilialeRitiro != null && this.prezzo.compareTo(BigDecimal.ZERO) > 0;
     }
 
     //verifico che le date del contratto non siano nulle
