@@ -78,4 +78,35 @@ public class Controller {
         // da fare veicoloDAO.save(veicolo);
         return veicolo;
     }
+
+    public Veicolo cercaTarga (String targa) throws VeicoloNonTrovatoException{
+        if(targa == null || targa.isBlank()){
+            throw new VeicoloNonTrovatoException("La targa non e' valida.");
+        }
+       // return veicoloDAO.trovaPerTarga(targa);
+        return null; //da togliere
+    }
+
+    //aggiorno a db lo stato di un veicolo mediante l'uso di setStatoVeicolo dal model
+    public boolean aggiornaStatoVeicolo (String targa, StatoVeicolo stato) throws VeicoloNonTrovatoException{
+        Veicolo veicolo = cercaTarga(targa);
+        if(veicolo == null){
+            throw new VeicoloNonTrovatoException("Veicolo non trovato " + targa);
+
+        }
+        veicolo.setStatoVeicolo(stato);
+        // da fare veicoloDAO.update(veicolo);
+        return true;
+    }
+
+    public boolean eliminaVeicolo ( String targa) throws VeicoloNonTrovatoException{
+        Veicolo veicolo = cercaTarga(targa);
+
+        if (veicolo == null){
+            throw new VeicoloNonTrovatoException("Il veicolo non esiste " + targa);
+        }
+
+
+
+    }
 }
