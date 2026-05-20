@@ -2,6 +2,7 @@ package controller;
 
 
 //import per i metodi di Cliente
+import exception.VeicoloNonDisponibileException;
 import exception.VeicoloNonTrovatoException;
 import model.Cliente;
 import model.TipoPatente;
@@ -13,6 +14,12 @@ import model.Veicolo;
 import dao.VeicoloDAO;
 import model.StatoVeicolo;
 import java.math.BigDecimal;
+import java.util.List;
+
+
+//import dei metodi di fliale
+import model.Filiale;
+import dao.FilialeDAO;
 
 public class Controller {
 
@@ -99,14 +106,36 @@ public class Controller {
         return true;
     }
 
-    public boolean eliminaVeicolo ( String targa) throws VeicoloNonTrovatoException{
+    public boolean eliminaVeicolo ( String targa) throws VeicoloNonTrovatoException, VeicoloNonDisponibileException {
         Veicolo veicolo = cercaTarga(targa);
 
         if (veicolo == null){
             throw new VeicoloNonTrovatoException("Il veicolo non esiste " + targa);
         }
-
-
-
+        if(!veicolo.verificaDisponibile()){
+            throw new VeicoloNonDisponibileException("Il veicolo non e' disponibile " + targa);
+        }
+        // da fare veicoloDAO.delete(veicolo);
+        return true;
     }
+    public List <Veicolo> getVeicoliDisponibili()throws Exception{
+       // da fare veicoloDAO.cercaStato(StatoVeicolo.Dispoonibile);
+        return null;
+    }
+
+    public List<Veicolo> getVeicoliManutenzione() throws  Exception{
+        // da fare veicoloDAO.cercaStato(StatoVeicolo.Manutenzione);
+        return null;
+    }
+
+    public List <Veicolo> getVeicoliNoleggiati() throws Exception{
+        // da fare veicoloDAO.cercaStato(StatoVeicolo.Noleggiato);
+        return null;
+    }
+
+    //seguono i metodi della classe filiale
+
+
+
+
 }

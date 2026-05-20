@@ -67,5 +67,8 @@ public abstract class Veicolo {
         return this.statoVeicolo == StatoVeicolo.Manutenzione;
     }
 
+    public boolean verificaDisponibile(){
+        return this.statoVeicolo == StatoVeicolo.Dispoonibile;
+    }
 
 }
