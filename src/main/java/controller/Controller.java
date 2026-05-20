@@ -2,12 +2,10 @@ package controller;
 
 
 //import per i metodi di Cliente
-import exception.VeicoloNonDisponibileException;
-import exception.VeicoloNonTrovatoException;
+import exception.*;
 import model.Cliente;
 import model.TipoPatente;
 import dao.ClienteDAO;
-import exception.ClienteNonTrovatoException;
 
 //import per i metodi di Veicolo
 import model.Veicolo;
@@ -134,7 +132,37 @@ public class Controller {
     }
 
     //seguono i metodi della classe filiale
+   // private final FilialeDAO filialeDAO;
+   // public Controller(){
+    //    this.filialeDAO = new FilialeDAOImpl;
+    //}
 
+    //aggiungere una filiale a db
+    public Filiale aggiungiFiliale(String codiceFiliale, String via, String citta, String cap, String numeroTelefono) throws DatiFilialeNonValidaException {
+        Filiale filiale = new Filiale (codiceFiliale, via, citta, cap, numeroTelefono);
+        if(!filiale.verificaDatiFiliale()){
+            throw new DatiFilialeNonValidaException("I dati inseriti non sono validi. ");
+        }
+        // da fare filialeDAO.save(filiale);
+        return filiale;
+    }
+
+    public Filiale cercaConIdFiliale(String codiceFiliale) throws FilialeNonTrovataException{
+        if(codiceFiliale == null || codiceFiliale.isBlank() ){
+            throw new FilialeNonTrovataException("La filiale non esiste.");
+        }
+        // da fare nel dao return filialeDAO.trovaPerCodice(codiceFiliale);
+        return null; //da levare
+    }
+
+    public boolean eliminaFiliale(String codiceFiliale)throws FilialeNonTrovataException{
+        Filiale filiale = cercaConIdFiliale(codiceFiliale);
+        if(filiale == null){
+            throw new FilialeNonTrovataException("La filiale non esiste. ");
+        }
+        // da fare nel dao filialeDAO.delete(filiale);
+        return true;
+    }
 
 
 
