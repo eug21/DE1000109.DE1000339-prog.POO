@@ -147,6 +147,7 @@ public class Controller {
         return filiale;
     }
 
+    //ricerca di una filiale mediante il suo codice univoco nel db
     public Filiale cercaConIdFiliale(String codiceFiliale) throws FilialeNonTrovataException{
         if(codiceFiliale == null || codiceFiliale.isBlank() ){
             throw new FilialeNonTrovataException("La filiale non esiste.");
@@ -155,6 +156,7 @@ public class Controller {
         return null; //da levare
     }
 
+    //eliminazione di una filiale dal db
     public boolean eliminaFiliale(String codiceFiliale)throws FilialeNonTrovataException{
         Filiale filiale = cercaConIdFiliale(codiceFiliale);
         if(filiale == null){
@@ -163,6 +165,37 @@ public class Controller {
         // da fare nel dao filialeDAO.delete(filiale);
         return true;
     }
+
+    //modifica dei dati di una filiale
+    public boolean modificaDatiFiliale(String nuovoCodice, String nuovaVia, String nuovoCap, String nuovaCitta, String nuovoNumTelefono, String codiceFiliale) throws DatiFilialeNonValidaException, FilialeNonTrovataException{
+        Filiale filiale = cercaConIdFiliale(codiceFiliale);
+        if (filiale == null){
+            throw new FilialeNonTrovataException("La filiale non esiste. ");
+        }
+
+        Filiale filialeTemp = new Filiale(nuovoCodice, nuovaVia, nuovaCitta, nuovoCap, nuovoNumTelefono);
+
+        if(!filialeTemp.verificaDatiFiliale()){
+            throw new DatiFilialeNonValidaException("I dati inseriti non sono validi. ");
+        }
+        filiale.setCodiceFiliale(nuovoCodice);
+        filiale.setCap(nuovoCap);
+        filiale.setCitta(nuovaCitta);
+        filiale.setVia(nuovaVia);
+        filiale.setNumeroTelefono(nuovoNumTelefono);
+
+       // da fare nel dao  filialeDAO.update(filiale);
+        return true;
+    }
+
+    //lista di tutte le filiali presenti a db
+    public List <Filiale> getFiliali (){
+        //return filialeDAO.getAll();
+        return null;
+    }
+
+    //seguono tutti i metodi che consentono di manipoalare i contratti
+
 
 
 

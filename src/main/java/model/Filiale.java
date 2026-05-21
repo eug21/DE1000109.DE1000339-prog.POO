@@ -60,15 +60,4 @@ public class Filiale {
     public String getIndirizzoFiliale(){
         return via + citta +  cap;
     }
-
-    //eventuale modifica del numero di telefono
-    public void modificaTelefono(String telefono) {
-        if(telefono == null){
-            return;
-        }
-        this.numeroTelefono = telefono;
-    }
-
-
-
 }
