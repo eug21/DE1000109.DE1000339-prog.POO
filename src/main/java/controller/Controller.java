@@ -2,6 +2,7 @@ package controller;
 
 
 //import per i metodi di Cliente
+import dao.ContrattoDAO;
 import exception.*;
 import model.Cliente;
 import model.TipoPatente;
@@ -15,9 +16,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-//import dei metodi di fliale
+//import per metodi di filiale
 import model.Filiale;
 import dao.FilialeDAO;
+
+//import per i metodi di contratto
+import model.Contratto;
+import dao.ContrattoDAO;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.math.BigDecimal;
 
 public class Controller {
 
@@ -195,6 +203,63 @@ public class Controller {
     }
 
     //seguono tutti i metodi che consentono di manipoalare i contratti
+    //private final ContrattoDAO contrattoDAO;
+   // private Controller(){
+      //  this.contrattoDAO = new ContrattoDAOImpl;
+    //}
+
+    //aggiunta di un contratto
+    public Contratto aggiungiContratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo, Cliente cliente, Veicolo veicolo) throws VeicoloNonDisponibileException, ClienteNonTrovatoException, DateContrattoNonValideException{
+        if(!veicolo.verificaDisponibile()){
+            throw new VeicoloNonDisponibileException("Il veicolo non e' disponibile. ");
+        }
+        if(!cliente.verificaPatente()){
+            throw new ClienteNonTrovatoException("Il cliente non ha una patente abilitata alla conduzione di tale veicolo. ");
+        }
+
+        Contratto contratto = new Contratto(idFilialeRitiro, idFilialeConsegna, dataInizio, dataFine, BigDecimal.ZERO);
+        if(!contratto.verificaDate()){
+            throw new DateContrattoNonValideException("Le date del contratto non sono valide. ");
+        }
+        BigDecimal prezzoFinale = veicolo.getTariffaDie().multiply(BigDecimal.valueOf(contratto.getDurataNoleggio()));
+        contratto.setPrezzo(prezzoFinale);
+        veicolo.setStatoVeicolo(StatoVeicolo.Noleggiato);
+       // da fare contrattoDAO.save(contratto);
+       //  da fare veicoloDAO.update(veicolo);
+        return contratto;
+    }
+    //metodo di chiusura di un contratto
+    public boolean chiudiContratto(Contratto contratto, Veicolo veicolo) throws VeicoloNonTrovatoException, ContrattoNonValidoException{
+        if(contratto == null ){
+            throw new ContrattoNonValidoException("Il contratto non e' valido. ");
+        }
+        veicolo.setStatoVeicolo(StatoVeicolo.Dispoonibile);
+       // da fare veicoloDAO.update(veicolo);
+        // da fare contrattoDAO.chiudi(contratto);
+        return true;
+    }
+
+    //metodo che mostra tutti i contratti relativi a un cliente
+    public List <Contratto> getContrattiCliente(Cliente cliente) throws ContrattoNonValidoException, ClienteNonTrovatoException{
+        if (cliente == null){
+            throw new ClienteNonTrovatoException("Il cliente non e' stato trovato. ");
+        }
+        // da fare return contrattoDAO.trovaPerCliente(cliente.getNumeroPatente());
+        return null; // da rimuovere
+    }
+
+    //lista dei contratti attivi della filiale
+    public List <Contratto> getContrattiFiliale (Filiale filiale) throws FilialeNonTrovataException{
+        if(filiale == null){
+            throw new FilialeNonTrovataException("La filiale non esiste. ");
+        }
+        // da fare return contrattoDAO.trovaPerFiliale(filiale.getCodiceFiliale());
+        return null; //da levare
+    }
+
+
+
+
 
 
 
