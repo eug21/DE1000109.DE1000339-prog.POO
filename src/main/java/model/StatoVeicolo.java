@@ -1,4 +1,4 @@
 package model;
 
-public enum StatoVeicolo { Dispoonibile, Noleggiato, Manutenzione
+public enum StatoVeicolo { Disponibile, Noleggiato, Manutenzione
 }
