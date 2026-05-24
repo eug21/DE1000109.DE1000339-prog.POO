@@ -1,29 +1,42 @@
 package gui;
 
-import controller.Controller;
-
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Home {
-    private JPanel mainPanel;
-    private static JFrame frameHome;
-    private Controller controller;
-
-    public static void main(String[] args) {
-        frameHome = new JFrame("Home");
-        frameHome.setContentPane(new Home().mainPanel);
-        frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameHome.pack();
-        frameHome.setVisible(true);
-
-
-    }
+    private JPanel Home;
+    private JLabel titolo;
+    private JButton GESTIONECLIENTIButton;
+    private JButton GESTIONEDIPENDENTIButton;
+    private JButton GESTIONEFILIALIButton;
+    private JButton GESTIONEVEICOLIButton;
 
     public Home() {
-        controller = new Controller();
-        // Add action listeners or other initialization code here
+        GESTIONECLIENTIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        GESTIONEDIPENDENTIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        GESTIONEFILIALIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gestioneFiliali frame = new gestioneFiliali();
+                frame.setVisible(true);
+            }
+        });
+        GESTIONEVEICOLIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
-
-
 }
