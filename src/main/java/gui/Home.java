@@ -16,6 +16,8 @@ public class Home {
         GESTIONECLIENTIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GestioneClienti frame = new GestioneClienti();
+                frame.setVisible(true);
 
             }
         });
@@ -35,7 +37,8 @@ public class Home {
         GESTIONEVEICOLIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                GestioneVeicoli frame = new GestioneVeicoli();
+                frame.setVisible(true);
             }
         });
     }

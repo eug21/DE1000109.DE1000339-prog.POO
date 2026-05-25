@@ -7,7 +7,7 @@ import model.TipoPatente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GestioneClienti {
+public class GestioneClienti extends JFrame {
     private JPanel gestioneClienti;
     private JComboBox tipopatenteCombo;
     private JTextField numeroPatenteTextField;

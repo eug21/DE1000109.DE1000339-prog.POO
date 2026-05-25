@@ -372,7 +372,5 @@ public class Controller {
         return  null; //da levare
     }
 
-    public Cliente ricq() {
-        return null;
-    }
+
 }
