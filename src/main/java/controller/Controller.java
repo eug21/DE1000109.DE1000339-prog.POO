@@ -2,7 +2,6 @@ package controller;
 
 
 //import per i metodi di Cliente
-import dao.ContrattoDAO;
 import exception.*;
 import model.Cliente;
 import model.TipoPatente;
@@ -25,7 +24,6 @@ import model.Contratto;
 import dao.ContrattoDAO;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.math.BigDecimal;
 
 public class Controller {
 
@@ -55,7 +53,7 @@ public class Controller {
             throw new ClienteNonTrovatoException("Numero patente non valido.");
         }
 
-       Cliente cliente = clienteDAO.trovaPerPatente(numPatente);  //da fare
+       Cliente cliente = clienteDAO.trovaPerPatente(numPatente);
 
         if (cliente == null){
             throw new ClienteNonTrovatoException("Il cliente non esiste "  + numPatente);
@@ -72,6 +70,14 @@ public class Controller {
 
         // return clienteDAO.delete(numPatente); //da fare nel dao
     }
+
+    //trova tutti i clienti
+    public List <Cliente> getTuttiClienti() throws Exception{
+        // da fare return clienteDAO.findAll();
+        return null; // da levare
+    }
+
+
 
 
     // da ora in poi ci sono i metodi relativi ai veicoli
@@ -209,12 +215,12 @@ public class Controller {
     //}
 
     //aggiunta di un contratto
-    public Contratto aggiungiContratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo, Cliente cliente, Veicolo veicolo) throws VeicoloNonDisponibileException, ClienteNonTrovatoException, DateContrattoNonValideException{
+    public Contratto aggiungiContratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo, Cliente cliente, Veicolo veicolo) throws VeicoloNonDisponibileException, ClienteNonTrovatoException, DateContrattoNonValideException, PatenteNonValidaException{
         if(!veicolo.verificaDisponibile()){
             throw new VeicoloNonDisponibileException("Il veicolo non e' disponibile. ");
         }
         if(!cliente.verificaPatente()){
-            throw new ClienteNonTrovatoException("Il cliente non ha una patente abilitata alla conduzione di tale veicolo. ");
+            throw new PatenteNonValidaException("Il cliente non ha una patente abilitata alla conduzione di tale veicolo. ");
         }
 
         Contratto contratto = new Contratto(idFilialeRitiro, idFilialeConsegna, dataInizio, dataFine, BigDecimal.ZERO);
@@ -233,14 +239,14 @@ public class Controller {
         if(contratto == null ){
             throw new ContrattoNonValidoException("Il contratto non e' valido. ");
         }
-        veicolo.setStatoVeicolo(StatoVeicolo.Dispoonibile);
+        veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
        // da fare veicoloDAO.update(veicolo);
         // da fare contrattoDAO.chiudi(contratto);
         return true;
     }
 
     //metodo che mostra tutti i contratti relativi a un cliente
-    public List <Contratto> getContrattiCliente(Cliente cliente) throws ContrattoNonValidoException, ClienteNonTrovatoException{
+    public List <Contratto> getContrattiCliente(Cliente cliente) throws ClienteNonTrovatoException{
         if (cliente == null){
             throw new ClienteNonTrovatoException("Il cliente non e' stato trovato. ");
         }
@@ -254,6 +260,26 @@ public class Controller {
             throw new FilialeNonTrovataException("La filiale non esiste. ");
         }
         // da fare return contrattoDAO.trovaPerFiliale(filiale.getCodiceFiliale());
+        return null; //da levare
+    }
+
+    //calcolo del prezzo di un contratto in anteprima, prima della conferma e della successiva creazione di esso
+    public BigDecimal calcolaCostoNoleggio(Veicolo veicolo, LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException{
+        Contratto contrattoTemp = new Contratto(null , null, dataInizio, dataFine, BigDecimal.ZERO);
+        if(!contrattoTemp.verificaDate()){
+            throw new DateContrattoNonValideException("Le date inserite non sono valide. ");
+        }
+
+        return veicolo.getTariffaDie().multiply(BigDecimal.valueOf(contrattoTemp.getDurataNoleggio()));
+    }
+
+    //lista dei contratti filtrata per periodo di date
+    public List <Contratto> contrattiPerPeriodo (LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException{
+        Contratto temp = new Contratto(null, null, dataInizio, dataFine, BigDecimal.ZERO);
+        if(!temp.verificaDate()){
+            throw new DateContrattoNonValideException("Le date del contratto non sono valide. ");
+        }
+        // da fare return contrattoDAO.trovaPerPeriodo(dataInizio, dataFine);
         return null; //da levare
     }
 
