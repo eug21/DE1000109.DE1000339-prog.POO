@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
-public class gestioneFiliali extends JFrame {
+public class GestioneFiliali extends JFrame {
     private JTextField txtCodice;
     private JTextField txtVia;
     private JTextField txtCitta;
@@ -16,9 +16,11 @@ public class gestioneFiliali extends JFrame {
     private JTextField txtTel;
     private JButton aggiungiFilialeButton;
     private JPanel mainPanel;
+    private JButton listaFilialiButton;
+    private JButton cercaFilialeButton;
 
 
-    public gestioneFiliali() {
+    public GestioneFiliali() {
 
         Controller controller = new Controller();
 
@@ -41,6 +43,13 @@ public class gestioneFiliali extends JFrame {
                 catch(Exception exception){
                     JOptionPane.showMessageDialog(null, exception.getMessage(), "Errore inatteso. ", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        listaFilialiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ListaFiliali frame = new ListaFiliali();
+                frame.setVisible(true);
             }
         });
     }

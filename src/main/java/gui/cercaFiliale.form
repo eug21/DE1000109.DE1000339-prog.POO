@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.gestioneFiliali">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="7" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.cercaFiliale">
+  <grid id="27dc6" binding="cercaFiliale" layout-manager="GridLayoutManager" row-count="7" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -8,28 +8,38 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="e324" class="javax.swing.JLabel">
+      <component id="de3f3" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Codice Filiale"/>
+          <text value="Codice filiale: "/>
         </properties>
       </component>
-      <vspacer id="b1242">
+      <vspacer id="24cd">
         <constraints>
           <grid row="5" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="8933e" class="javax.swing.JTextField" binding="txtCodice">
+      <component id="b57d3" class="javax.swing.JTextField" binding="testoCodiceTextField" default-binding="true">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="testoCodice"/>
+        </properties>
       </component>
-      <component id="ae22c" class="javax.swing.JLabel">
+      <component id="f3c9f" class="javax.swing.JButton" binding="cercaButton" default-binding="true">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Cerca"/>
+        </properties>
+      </component>
+      <component id="e90f8" class="javax.swing.JLabel">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -37,15 +47,17 @@
           <text value="Via"/>
         </properties>
       </component>
-      <component id="1e5f3" class="javax.swing.JTextField" binding="txtVia">
+      <component id="f88f" class="javax.swing.JTextField" binding="testoViaTextField" default-binding="true">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="testoVia"/>
+        </properties>
       </component>
-      <component id="9c296" class="javax.swing.JLabel">
+      <component id="6ebf0" class="javax.swing.JLabel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -53,15 +65,17 @@
           <text value="Citta"/>
         </properties>
       </component>
-      <component id="c1b06" class="javax.swing.JTextField" binding="txtCitta">
+      <component id="816fc" class="javax.swing.JTextField" binding="testoCittaTextField" default-binding="true">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="testoCitta"/>
+        </properties>
       </component>
-      <component id="e9538" class="javax.swing.JLabel">
+      <component id="49d3e" class="javax.swing.JLabel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -69,15 +83,17 @@
           <text value="CAP"/>
         </properties>
       </component>
-      <component id="1424d" class="javax.swing.JTextField" binding="txtCAP">
+      <component id="73d8c" class="javax.swing.JTextField" binding="testoCAPTextField" default-binding="true">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="testoCAP"/>
+        </properties>
       </component>
-      <component id="3e83" class="javax.swing.JLabel">
+      <component id="ab150" class="javax.swing.JLabel">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -85,20 +101,22 @@
           <text value="Telefono"/>
         </properties>
       </component>
-      <component id="9b319" class="javax.swing.JTextField" binding="txtTel">
+      <component id="bb6cf" class="javax.swing.JTextField" binding="testoTelefonoTextField" default-binding="true">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="testoTelefono"/>
+        </properties>
       </component>
-      <component id="3c72a" class="javax.swing.JButton" binding="aggiungiFilialeButton" default-binding="true">
+      <component id="f8e0b" class="javax.swing.JButton" binding="salvaModificheButton" default-binding="true">
         <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Aggiungi filiale"/>
+          <text value="Salva modifiche"/>
         </properties>
       </component>
     </children>

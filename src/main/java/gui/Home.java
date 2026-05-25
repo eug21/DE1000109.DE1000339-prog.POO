@@ -28,7 +28,7 @@ public class Home {
         GESTIONEFILIALIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gestioneFiliali frame = new gestioneFiliali();
+                GestioneFiliali frame = new GestioneFiliali();
                 frame.setVisible(true);
             }
         });
