@@ -25,7 +25,19 @@ import dao.ContrattoDAO;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-//import per
+//import per i metodi di responsabile
+import model.Responsabile;
+import  dao.ResponsabileDAO;
+
+//import per i metodi di meccanico
+import model.Meccanico;
+import dao.MeccanicoDAO;
+
+//import per i metodi di riparazione
+import  model.Riparazioni;
+import java.util.Date;
+import dao.RiparazioniDAO;
+
 public class Controller {
 
     //private final ClienteDAO clienteDAO;
@@ -284,13 +296,84 @@ public class Controller {
         return null; //da levare
     }
 
+    //seguono i metodi della classe responsabile
+    // private final ResponsabileDAO responsabileeDAO;
+    // public Controller(){
+    //    this.responsabileDAO = new ResponsabileDA0impl;
+    //}
 
+    //aggiunge un responsabile
+    public Responsabile aggiungeResponsabile(String idResponsabile, String nome, String cognome, String mail) throws Exception{
+        Responsabile responsabile = new Responsabile(idResponsabile, nome, cognome, mail);
+        if(!responsabile.isDisponibile()){
+            throw new Exception("Dati responsabile non validi");
+        }
 
+        //da fare responsabileDao.save(responsabile);
+        return responsabile;
+    }
 
+    //ricerca responsabile per id
+    public  Responsabile cercaResponsabile(String idResponsabile) throws  ResponsabileNonTrovatoException{
+        if(idResponsabile == null || idResponsabile.isBlank()){
+            throw  new ResponsabileNonTrovatoException("ID responsabile non valido.");
+        }
+        // da fare return responsabileDAO.trovaPerID(idResponsabile);
+        return null;
+    }
 
+    //elimina un responsabile
+    public boolean eliminaResponsabile(String idResponsabile) throws ResponsabileNonTrovatoException{
+        Responsabile responsabile = cercaResponsabile(idResponsabile);
+        if(responsabile == null){
+            throw  new ResponsabileNonTrovatoException("Il responsabile non esiste" + idResponsabile);
+        }
+        //da fare responsabileDao.delete(idResponsabile);
+        return  true;
+    }
 
+    //lista di tutti i responsabili
+    public list<Responsabile> getTuttiResponsabili() throws Exception{
+        // da fare return responsabileDAO.findall();
+        return null;
+    }
 
+    //seguono i metodi della classe riparazioni e meccanico
+    // private final RiparazioniDAO riparazioniDAO;
+    // public Controller(){
+    //    this.riparazioniDAO = new RiparazioniDA0impl;
+    //}
 
+    //aggiunge una riparazione controllando la disponibilità del meccanico
+    public aggiungiRiparazione(String descrizioneProblema, float costoStimato, Date dataRiparazione,
+           float costoFinale, Veicolo veicolo, Meccanico meccanico )throws  RiparazioniException{
 
+        if(!meccanico.accettaRiparazione()){
+            throw new RiparazioniException("il meccanico non è disponibile.");
+        }
+        Riparazioni riparazioni = new Riparazioni (descrizioneProblema, costoStimato,dataRiparazione,
+                                                   costoFinale,veicolo,meccanico);
+        meccanico.setDisponibile(false);
+        //da fare riparazioniDAO.save(riparazione);
+        return riparazione;
+    }
 
+    // chiude una riparazione e libera il meccanico
+    public boolean chiudiRiparazione(Riparazioni riparazione, Meccanico meccanico,
+                                     float costoFinale) throws RiparazioniNonTrovataException{
+        if(riparazione == null){
+            throw  new RiparazioniNonTrovataException("La riparazione non esiste.");
+        }
+        riparazione.setCostoFinale(costoFinale);
+        meccanico.setDisponibile(true); //meccanico torna disponibile
+        //da fare riparazioniDAO.update(riparazione);
+        //da fare meccanicoDAO.update(meccanico);
+        return true;
+    }
+
+    //lista di tutte le riparazioni
+    public List<Riparazioni> getTutteRiparazioni() throws Exception{
+        //da fare return riparazioniDAO.findAll();
+        return  null; //da levare
+    }
 }
