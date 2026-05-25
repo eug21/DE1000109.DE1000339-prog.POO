@@ -5,11 +5,9 @@ package controller;
 import exception.*;
 import model.Cliente;
 import model.TipoPatente;
-import dao.ClienteDAO;
 
 //import per i metodi di Veicolo
 import model.Veicolo;
-import dao.VeicoloDAO;
 import model.StatoVeicolo;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,26 +15,22 @@ import java.util.List;
 
 //import per metodi di filiale
 import model.Filiale;
-import dao.FilialeDAO;
 
 //import per i metodi di contratto
 import model.Contratto;
-import dao.ContrattoDAO;
+
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 //import per i metodi di responsabile
 import model.Responsabile;
-import  dao.ResponsabileDAO;
 
 //import per i metodi di meccanico
 import model.Meccanico;
-import dao.MeccanicoDAO;
 
 //import per i metodi di riparazione
-import  model.Riparazioni;
+import model.Riparazione;
 import java.util.Date;
-import dao.RiparazioniDAO;
+import dao.RiparazioneDAO;
 
 public class Controller {
 
@@ -82,6 +76,7 @@ public class Controller {
         //da aggiungere verifica di contratti attivi
 
         // return clienteDAO.delete(numPatente); //da fare nel dao
+        return true;
     }
 
     //trova tutti i clienti
@@ -333,7 +328,7 @@ public class Controller {
     }
 
     //lista di tutti i responsabili
-    public list<Responsabile> getTuttiResponsabili() throws Exception{
+    public List<Responsabile> getTuttiResponsabili() throws Exception{
         // da fare return responsabileDAO.findall();
         return null;
     }
@@ -345,24 +340,24 @@ public class Controller {
     //}
 
     //aggiunge una riparazione controllando la disponibilità del meccanico
-    public aggiungiRiparazione(String descrizioneProblema, float costoStimato, Date dataRiparazione,
-           float costoFinale, Veicolo veicolo, Meccanico meccanico )throws  RiparazioniException{
+    public Riparazione aggiungiRiparazione(String descrizioneProblema, float costoStimato, Date dataRiparazione,
+                                           float costoFinale, Veicolo veicolo, Meccanico meccanico )throws  RiparazioneNonTrovateException{
 
         if(!meccanico.accettaRiparazione()){
-            throw new RiparazioniException("il meccanico non è disponibile.");
+            throw new RiparazioneNonTrovateException("il meccanico non è disponibile.");
         }
-        Riparazioni riparazioni = new Riparazioni (descrizioneProblema, costoStimato,dataRiparazione,
-                                                   costoFinale,veicolo,meccanico);
+        Riparazione riparazione = new Riparazione(costoStimato, descrizioneProblema,costoFinale,
+                                                   dataRiparazione,veicolo,meccanico);
         meccanico.setDisponibile(false);
         //da fare riparazioniDAO.save(riparazione);
         return riparazione;
     }
 
     // chiude una riparazione e libera il meccanico
-    public boolean chiudiRiparazione(Riparazioni riparazione, Meccanico meccanico,
-                                     float costoFinale) throws RiparazioniNonTrovataException{
+    public boolean chiudiRiparazione(Riparazione riparazione, Meccanico meccanico,
+                                     float costoFinale) throws RiparazioneNonTrovateException{
         if(riparazione == null){
-            throw  new RiparazioniNonTrovataException("La riparazione non esiste.");
+            throw  new RiparazioneNonTrovateException("La riparazione non esiste.");
         }
         riparazione.setCostoFinale(costoFinale);
         meccanico.setDisponibile(true); //meccanico torna disponibile
@@ -372,7 +367,7 @@ public class Controller {
     }
 
     //lista di tutte le riparazioni
-    public List<Riparazioni> getTutteRiparazioni() throws Exception{
+    public List<Riparazione> getTutteRiparazioni() throws Exception{
         //da fare return riparazioniDAO.findAll();
         return  null; //da levare
     }

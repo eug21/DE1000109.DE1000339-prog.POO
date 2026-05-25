@@ -33,7 +33,7 @@ public class Responsabile {
         return mail;
     }
 
-    public String isDisponibile(){
+    public boolean isDisponibile(){
         return disponibile;
     }
 

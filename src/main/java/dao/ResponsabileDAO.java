@@ -1,5 +1,5 @@
 
 package  dao;
 
-Public interface ResponsabileDAO{
+public interface ResponsabileDAO{
 }

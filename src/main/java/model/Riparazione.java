@@ -2,7 +2,7 @@ package model;
 
 import java.util.Date;
 
-public class Riparazioni {
+public class Riparazione {
 
     private String descrizioneProblema;
     private float costoStimato;
@@ -12,7 +12,7 @@ public class Riparazioni {
     private Meccanico meccanico;
 
 
-    public Riparazioni(float costoStimato, String descrizioneProblema, float costoFinale, Date dataRiparazione, Veicolo veicolo, Meccanico meccanico) {
+    public Riparazione(float costoStimato, String descrizioneProblema, float costoFinale, Date dataRiparazione, Veicolo veicolo, Meccanico meccanico) {
         this.costoStimato = costoStimato;
         this.descrizioneProblema = descrizioneProblema;
         this.costoFinale = costoFinale;
