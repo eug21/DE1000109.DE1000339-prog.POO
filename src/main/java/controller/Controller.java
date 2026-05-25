@@ -25,6 +25,7 @@ import dao.ContrattoDAO;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+//import per
 public class Controller {
 
     //private final ClienteDAO clienteDAO;
@@ -282,6 +283,8 @@ public class Controller {
         // da fare return contrattoDAO.trovaPerPeriodo(dataInizio, dataFine);
         return null; //da levare
     }
+
+
 
 
 

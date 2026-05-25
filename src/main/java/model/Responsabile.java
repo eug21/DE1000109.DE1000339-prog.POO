@@ -6,42 +6,60 @@ public class Responsabile {
     private String nome;
     private String cognome;
     private String mail;
+    private boolean disponibile;
 
     public Responsabile(String idResponsabile, String nome, String cognome, String mail){
         this.idResponsabile = idResponsabile;
         this.nome = nome;
         this.cognome = cognome;
         this.mail = mail;
+        this.disponibile = true;
     }
 
-    public  String IdResp(){
+    //Metodi Getter//
+    public  String getIdResponsabileID(){
         return idResponsabile;
     }
 
-    public String NomeResp(){
+    public String getNome(){
         return nome;
     }
 
-    public String CognResp(){
+    public String getCognome(){
         return cognome;
     }
 
-    public String MailResp(){
+    public String getMail(){
         return mail;
     }
 
-    public void NewNome(String nome){
+    public String isDisponibile(){
+        return disponibile;
+    }
+
+    //metodi Setter//
+    public void setNome(String nome){
         this.nome = nome;
     }
 
-    public void NewCognome(String cognome){
+    public void setCognome(String cognome){
         this.cognome = cognome;
     }
 
-    public void NewMail(String mail){
+    public void setMail(String mail){
         this.mail = mail;
     }
 
+    public void setDisponibile(boolean disponibile){
+        this.disponibile = disponibile;
+    }
+
+
+    // Controllo disponibilià responsabile
+
+    public  boolean accettaIncarico(){
+        return disponibile;
+    }
 
     @Override
     public String toString(){

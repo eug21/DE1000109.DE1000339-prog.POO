@@ -4,31 +4,39 @@ public class Meccanico {
     private String idMeccanico;
     private String nome;
     private String cognome;
+    private boolean disponibile;
 
     public Meccanico(String idMeccanico, String nome, String cognome){
         this.idMeccanico = idMeccanico;
         this.nome = nome;
         this.cognome = cognome;
+        this.disponibile = true;
     }
 
-    public String IdMecc(){
-        return idMeccanico;
+
+    // Metodi Getter
+    public String getIdMeccanico(){return idMeccanico;}
+
+    public String getNome(){return nome;}
+
+    public String getCognome(){return cognome;}
+
+    public String isDisponibile(){
+        return  disponibile;
     }
 
-    public String nomeMecc(){
-        return nome;
+    // Metodi Setter
+    public void setNome(String nome){this.nome = nome;}
+
+    public void setCognome(String cognome){this.cognome = cognome;}
+
+    public void setDisponibile(boolean disponibile){
+        this.disponibile = disponibile;
     }
 
-    public String cognomeMecc(){
-        return cognome;
-    }
-
-    public void newNome(String nome){
-        this.nome = nome;
-    }
-
-    public void newNome(String cognome){
-        this.cognome = cognome;
+// Controllo disponibilità del meccanico ad effettuare una riparazione
+    public  boolean accettaRiparazione(){
+        return disponibile;
     }
 
     @Override
