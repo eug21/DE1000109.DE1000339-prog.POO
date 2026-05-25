@@ -47,7 +47,16 @@ public class GestioneClienti {
         listaClientiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ListaClienti frame = new ListaClienti();
+                frame.setVisible(true);
 
+            }
+        });
+        cercaClienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CercaCliente frame = new CercaCliente();
+                frame.setVisible(true);
             }
         });
     }

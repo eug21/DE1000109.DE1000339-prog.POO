@@ -371,4 +371,8 @@ public class Controller {
         //da fare return riparazioniDAO.findAll();
         return  null; //da levare
     }
+
+    public Cliente ricq() {
+        return null;
+    }
 }

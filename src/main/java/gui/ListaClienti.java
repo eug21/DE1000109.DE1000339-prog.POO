@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ListaClienti {
+public class ListaClienti extends JFrame {
     private JPanel listaClienti;
     private JButton aggiornaListaButton;
     private JButton eliminaClienteButton;
@@ -21,9 +21,9 @@ public class ListaClienti {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Numero Patente", "Nome", "Cognome", "Codice Fiscale", "Tipo Patente"};
-                Object[][] righe = controller.getTuttiClienti();
+                Object[][] righe = {};
 
-                tabellaClienti.setModel(DefaultTableModel(righe, colonne);
+                tabellaClienti.setModel( new DefaultTableModel(righe, colonne));
             }
         });
 
