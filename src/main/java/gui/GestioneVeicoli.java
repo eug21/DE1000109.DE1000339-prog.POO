@@ -19,6 +19,8 @@ public class GestioneVeicoli extends JFrame {
         aggiungiVeicoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                AggiuntaVeicolo frame = new AggiuntaVeicolo();
+                frame.setVisible(true);
 
             }
         });
@@ -27,6 +29,8 @@ public class GestioneVeicoli extends JFrame {
         listaVeicoliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GestioneVeicoli frame = new GestioneVeicoli();
+                frame.setVisible(true);
 
             }
         });
@@ -35,6 +39,8 @@ public class GestioneVeicoli extends JFrame {
         cercaVeicoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CercaVeicolo frame = new CercaVeicolo();
+                frame.setVisible(true);
 
             }
         });
