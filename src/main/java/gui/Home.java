@@ -42,4 +42,12 @@ public class Home {
             }
         });
     }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Home");
+        frame.setContentPane(new Home().Home);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
 }

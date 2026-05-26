@@ -19,6 +19,11 @@ public class GestioneClienti extends JFrame {
     private JButton aggiungiClienteButton;
 
     public GestioneClienti() {
+        setTitle("Gestione Clienti");
+        setContentPane(gestioneClienti);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
         Controller controller = new Controller();
         for(TipoPatente tipo : TipoPatente.values()){
             tipopatenteCombo.addItem(tipo);

@@ -30,7 +30,7 @@ public class Moto extends Veicolo {
         return "Moto:[targa=" + getTarga()
         + ", Modello=" + getModello()
         + ", Marca=" + getMarca()
-        +", TariffaDie=" + getTarriffaDie()
+        +", TariffaDie=" + getTariffaDie()
         + ", StatoVeicolo=" + getStatoVeicolo()
         + ", Cilindrata="+ cilindrata + "]";
 

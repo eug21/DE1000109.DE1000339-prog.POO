@@ -21,8 +21,8 @@ public class Meccanico {
 
     public String getCognome(){return cognome;}
 
-    public String isDisponibile(){
-        return  disponibile;
+    public boolean isDisponibile(){
+        return this.disponibile;
     }
 
     // Metodi Setter

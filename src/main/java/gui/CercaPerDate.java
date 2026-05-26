@@ -24,6 +24,7 @@ public class CercaPerDate extends JFrame{
 
     public CercaPerDate(){
 
+
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,7 +50,8 @@ public class CercaPerDate extends JFrame{
                     return;
                 }
                 int modelRow = tabContratti.convertRowIndexToModel(riga);
-                Contratto contratto = tabContratti.get(modelRow);
+                //Contratto contratto = tabContratti.get(modelRow);
+                Contratto contratto = null;
                 try{
                     controller.chiudiContratto(contratto);
                     JOptionPane.showMessageDialog(null, "Contratto eliminato con successo", "Contratto eliminato", JOptionPane.INFORMATION_MESSAGE);

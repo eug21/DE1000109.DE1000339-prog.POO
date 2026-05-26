@@ -30,7 +30,7 @@ public class Furgone extends Veicolo {
         return "Furgone [Targa=" + getTarga()
         +", Modello=" + getModello()
         +", Marca=" + getMarca()
-        +", tariffaDie=" + getTarrifaDie()
+        +", tariffaDie=" + getTariffaDie()
         +", StatoVeicolo=" + getStatoVeicolo()
         +", capacitaCarico=" + capacitaCarico + "]" ;
     }
