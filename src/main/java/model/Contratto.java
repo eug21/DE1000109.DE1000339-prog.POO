@@ -4,7 +4,27 @@ import java.time.temporal.ChronoUnit;
 import java.math.BigDecimal;
 
 public class Contratto {
-    private String idFilialeRitiro, idFilialeConsegna;
+    private String idFilialeRitiro;
+    private String idFilialeConsegna;
+
+    public String getTargaVeicolo() {
+        return targaVeicolo;
+    }
+
+    public void setTargaVeicolo(String targaVeicolo) {
+        this.targaVeicolo = targaVeicolo;
+    }
+
+    public Contratto(String idFilialeRitiro, String idFilialeConsegna, String targaVeicolo, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo) {
+        this.idFilialeRitiro = idFilialeRitiro;
+        this.idFilialeConsegna = idFilialeConsegna;
+        this.targaVeicolo = targaVeicolo;
+        this.dataInizio = dataInizio;
+        this.dataFine = dataFine;
+        this.prezzo = prezzo;
+    }
+
+    private String targaVeicolo;
     private LocalDate dataInizio, dataFine;
     private BigDecimal prezzo;
 
@@ -48,17 +68,11 @@ public class Contratto {
         this.prezzo = prezzo;
     }
 
-    public Contratto(String idFilialeRitiro, String idFilialeConsegna, LocalDate dataInizio, LocalDate dataFine, BigDecimal prezzo) {
-        this.idFilialeRitiro = idFilialeRitiro;
-        this.idFilialeConsegna = idFilialeConsegna;
-        this.dataInizio = dataInizio;
-        this.dataFine = dataFine;
-        this.prezzo = prezzo;
-    }
+
 
     //verifico che i dati del contratto non siano vuoti
     public boolean verificaDatiContratto(){
-        return this.dataFine != null && this.dataInizio != null && this.idFilialeConsegna != null && this.idFilialeRitiro != null && this.prezzo.compareTo(BigDecimal.ZERO) > 0;
+        return this.dataFine != null && this.dataInizio != null && this.idFilialeConsegna != null && this.idFilialeRitiro != null && this.prezzo.compareTo(BigDecimal.ZERO) > 0 && targaVeicolo != null && targaVeicolo.isBlank();
     }
 
     //verifico che le date del contratto non siano nulle

@@ -231,7 +231,7 @@ public class Controller {
         }
 
         Contratto contratto = new Contratto(idFilialeRitiro, idFilialeConsegna, dataInizio, dataFine, BigDecimal.ZERO);
-        if (!contratto.verificaDate()) {
+        if(!contratto.verificaDate()){
             throw new DateContrattoNonValideException("Le date del contratto non sono valide. ");
         }
         BigDecimal prezzoFinale = veicolo.getTariffaDie().multiply(BigDecimal.valueOf(contratto.getDurataNoleggio()));
@@ -243,10 +243,11 @@ public class Controller {
     }
 
     //metodo di chiusura di un contratto
-    public boolean chiudiContratto(Contratto contratto, Veicolo veicolo) throws VeicoloNonTrovatoException, ContrattoNonValidoException {
-        if (contratto == null) {
+    public boolean chiudiContratto(Contratto contratto, Veicolo veicolo) throws VeicoloNonTrovatoException, ContrattoNonValidoException{
+        if(contratto == null ){
             throw new ContrattoNonValidoException("Il contratto non e' valido. ");
         }
+        Veicolo veicolo = cercaTarga(contratto.getTargaVeicolo());
         veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
         // da fare veicoloDAO.update(veicolo);
         // da fare contrattoDAO.chiudi(contratto);
@@ -272,9 +273,9 @@ public class Controller {
     }
 
     //calcolo del prezzo di un contratto in anteprima, prima della conferma e della successiva creazione di esso
-    public BigDecimal calcolaCostoNoleggio(Veicolo veicolo, LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException {
-        Contratto contrattoTemp = new Contratto(null, null, dataInizio, dataFine, BigDecimal.ZERO);
-        if (!contrattoTemp.verificaDate()) {
+    public BigDecimal calcolaCostoNoleggio(Veicolo veicolo, LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException{
+        Contratto contrattoTemp = new Contratto(null , null, dataInizio, dataFine, BigDecimal.ZERO);
+        if(!contrattoTemp.verificaDate()){
             throw new DateContrattoNonValideException("Le date inserite non sono valide. ");
         }
 
@@ -282,9 +283,9 @@ public class Controller {
     }
 
     //lista dei contratti filtrata per periodo di date
-    public List<Contratto> contrattiPerPeriodo(LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException {
+    public List <Contratto> contrattiPerPeriodo (LocalDate dataInizio, LocalDate dataFine) throws DateContrattoNonValideException{
         Contratto temp = new Contratto(null, null, dataInizio, dataFine, BigDecimal.ZERO);
-        if (!temp.verificaDate()) {
+        if(!temp.verificaDate()){
             throw new DateContrattoNonValideException("Le date del contratto non sono valide. ");
         }
         // da fare return contrattoDAO.trovaPerPeriodo(dataInizio, dataFine);
