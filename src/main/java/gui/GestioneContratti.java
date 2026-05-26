@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class GestioneContratti {
     private JPanel gestioneContratti;
     private JButton nuovoContrattoButton;
-    private JButton listaContrattiButton;
+    private JButton cercaDate;
     private JButton cercaPerClienteButton;
     private JButton cercaPerFilialeButton;
 
@@ -20,18 +20,24 @@ public class GestioneContratti {
         nuovoContrattoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                AggiungiContratto frame = new AggiungiContratto();
+                frame.setVisible(true);
 
             }
         });
-        listaContrattiButton.addActionListener(new ActionListener() {
+        cercaDate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CercaPerDate frame = new CercaPerDate();
+                frame.setVisible(true);
 
             }
         });
         cercaPerClienteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CercaPerCliente frame = new CercaPerCliente();
+                frame.setVisible(true);
 
             }
         });
@@ -41,5 +47,6 @@ public class GestioneContratti {
 
             }
         });
+
     }
 }

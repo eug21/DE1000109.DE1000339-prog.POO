@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
-public class AggiungiContratto {
+public class AggiungiContratto extends JFrame {
     private JPanel aggiungiContratto;
     private JTextField testoPatenteTextField;
     private JTextField testoTargaTextField;
