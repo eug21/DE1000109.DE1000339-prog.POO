@@ -3,7 +3,7 @@ package model;
 import java.util.Date;
 
 /**
- * The type Riparazione.
+ * Classe riparazioe, classe associativa tra meccanico e veicolo, si compone con la descrizione del problema, il costo e la data.
  */
 public class Riparazione {
 
@@ -15,31 +15,31 @@ public class Riparazione {
 
 
     /**
-     * Gets targa veicolo.
+     * Ritorna la targa veicolo.
      *
-     * @return the targa veicolo
+     *
      */
     public String getTargaVeicolo() {
         return targaVeicolo;
     }
 
     /**
-     * Sets targa veicolo.
+     * Imposta la targa veicolo.
      *
-     * @param targaVeicolo the targa veicolo
+     *
      */
     public void setTargaVeicolo(String targaVeicolo) {
         this.targaVeicolo = targaVeicolo;
     }
 
     /**
-     * Instantiates a new Riparazione.
+     * Istanzia una riparazione
      *
-     * @param costoStimato        the costo stimato
-     * @param descrizioneProblema the descrizione problema
-     * @param costoFinale         the costo finale
-     * @param dataRiparazione     the data riparazione
-     * @param targaVeicolo        the targa veicolo
+     * @param costoStimato         costo stimato
+     * @param descrizioneProblema  descrizione problema
+     * @param costoFinale          costo finale
+     * @param dataRiparazione      data riparazione
+     * @param targaVeicolo         targa veicolo
      */
     public Riparazione(float costoStimato, String descrizioneProblema, float costoFinale, Date dataRiparazione, String targaVeicolo) {
         this.costoStimato = costoStimato;
@@ -51,9 +51,9 @@ public class Riparazione {
     }
 
     /**
-     * Gets descrizione problema.
+     * Ritorna la descrizione problema.
      *
-     * @return the descrizione problema
+     *
      */
 //Metodi Getter//
     public String getDescrizioneProblema() {
@@ -61,27 +61,27 @@ public class Riparazione {
     }
 
     /**
-     * Gets costo stimato.
+     * Ritorna il  costo stimato.
      *
-     * @return the costo stimato
+     *
      */
     public float getCostoStimato() {
         return costoStimato;
     }
 
     /**
-     * Gets costo finale.
+     * Ritorna il costo finale.
      *
-     * @return the costo finale
+     *
      */
     public float getCostoFinale() {
         return costoFinale;
     }
 
     /**
-     * Gets data riparazione.
+     * Ritorna la data riparazione.
      *
-     * @return the data riparazione
+     *
      */
     public Date getDataRiparazione() {
         return dataRiparazione;
@@ -89,9 +89,9 @@ public class Riparazione {
 
 
     /**
-     * Sets descrizione problema.
+     * Imposta la  descrizione problema.
      *
-     * @param descrizioneProblema the descrizione problema
+     *
      */
 //Metodi Setter//
     public void setDescrizioneProblema(String descrizioneProblema) {
@@ -99,16 +99,16 @@ public class Riparazione {
     }
 
     /**
-     * Sets costo stimato.
+     * Imposta il costo stimato.
      *
-     * @param costoStimato the costo stimato
+     *
      */
     public void setCostoStimato(float costoStimato) {
         this.costoStimato = costoStimato;
     }
 
     /**
-     * Sets costo finale.
+     * Imposta il costo finale.
      *
      * @param costoFinale the costo finale
      */
@@ -117,9 +117,9 @@ public class Riparazione {
     }
 
     /**
-     * Sets data riparazione.
+     * Imposta la data riparazione.
      *
-     * @param dataRiparazione the data riparazione
+     *
      */
     public void setDataRiparazione(Date dataRiparazione) {
         this.dataRiparazione = dataRiparazione;

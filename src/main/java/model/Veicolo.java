@@ -2,7 +2,7 @@ package model;
 import java.math.BigDecimal;
 
 /**
- * The type Veicolo.
+ * Classe Veicolo, un veicolo viene noleggiato da un cliente.
  */
 public abstract class Veicolo {
     private String targa, modello, marca;
@@ -10,13 +10,13 @@ public abstract class Veicolo {
     private StatoVeicolo statoVeicolo;
 
     /**
-     * Instantiates a new Veicolo.
+     * Istanzia un veicolo
      *
-     * @param targa        the targa
-     * @param modello      the modello
-     * @param marca        the marca
-     * @param tariffaDie   the tariffa die
-     * @param statoVeicolo the stato veicolo
+     * @param targa         targa (identificativo)
+     * @param modello       modello
+     * @param marca         marca
+     * @param tariffaDie    tariffa die
+     * @param statoVeicolo  stato veicolo
      */
     public Veicolo(String targa, String modello, String marca, BigDecimal tariffaDie, StatoVeicolo statoVeicolo) {
         this.targa = targa;
@@ -27,99 +27,99 @@ public abstract class Veicolo {
     }
 
     /**
-     * Gets targa.
+     * Ritorna la targa.
      *
-     * @return the targa
+     *
      */
     public String getTarga() {
         return targa;
     }
 
     /**
-     * Sets targa.
+     * Imposta la targa.
      *
-     * @param targa the targa
+     *
      */
     public void setTarga(String targa) {
         this.targa = targa;
     }
 
     /**
-     * Gets modello.
+     * Ritorna il  modello.
      *
-     * @return the modello
+     *
      */
     public String getModello() {
         return modello;
     }
 
     /**
-     * Sets modello.
+     * Imposta modello.
      *
-     * @param modello the modello
+     *
      */
     public void setModello(String modello) {
         this.modello = modello;
     }
 
     /**
-     * Gets marca.
+     * Ritorna la marca.
      *
-     * @return the marca
+     *
      */
     public String getMarca() {
         return marca;
     }
 
     /**
-     * Sets marca.
+     * Imposta la marca.
      *
-     * @param marca the marca
+     *
      */
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
     /**
-     * Gets tariffa die.
+     * Ritorna la tariffa die (tariffa giornaliera)
      *
-     * @return the tariffa die
+     *
      */
     public BigDecimal getTariffaDie() {
         return tariffaDie;
     }
 
     /**
-     * Sets tariffa die.
+     * Imposta tariffa die.
      *
-     * @param tariffaDie the tariffa die
+     *
      */
     public void setTariffaDie(BigDecimal tariffaDie) {
         this.tariffaDie = tariffaDie;
     }
 
     /**
-     * Gets stato veicolo.
+     * Ritorna stato veicolo.
      *
-     * @return the stato veicolo
+     *
      */
     public StatoVeicolo getStatoVeicolo() {
         return statoVeicolo;
     }
 
     /**
-     * Sets stato veicolo.
+     * Imposta stato veicolo.
      *
-     * @param statoVeicolo the stato veicolo
+     *
      */
     public void setStatoVeicolo(StatoVeicolo statoVeicolo) {
         this.statoVeicolo = statoVeicolo;
     }
 
     /**
-     * Verifica dati veicolo boolean.
+     * Verifica dati veicolo .
      *
-     * @return the boolean
+     *
      */
 //controllo validità dei dati del veicolo
     public boolean verificaDatiVeicolo(){
@@ -127,10 +127,10 @@ public abstract class Veicolo {
     }
 
     /**
-     * Verifica stato veicolo boolean.
+     * Verifica stato veicolo .
      *
-     * @param stato the stato
-     * @return the boolean
+     *
+     *
      */
 //verifico la disponibilità del veicolo, restituisco true se è disponibile altrimenti false
     public boolean  verificaStatoVeicolo(StatoVeicolo stato){
@@ -138,18 +138,18 @@ public abstract class Veicolo {
     }
 
     /**
-     * Verifica manutenzione boolean.
+     * Verifica manutenzione .
      *
-     * @return the boolean
+     *
      */
     public boolean verificaManutenzione(){
         return this.statoVeicolo == StatoVeicolo.Manutenzione;
     }
 
     /**
-     * Verifica disponibile boolean.
+     * Verifica disponibilità.
      *
-     * @return the boolean
+     *
      */
     public boolean verificaDisponibile(){
         return this.statoVeicolo == StatoVeicolo.Disponibile;

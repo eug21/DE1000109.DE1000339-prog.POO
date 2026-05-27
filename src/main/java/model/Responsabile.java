@@ -2,7 +2,7 @@
 package model;
 
 /**
- * The type Responsabile.
+ * Classe responsabile, che si occupa di gestire una filiale.
  */
 public class Responsabile {
 
@@ -13,12 +13,12 @@ public class Responsabile {
     private boolean disponibile;
 
     /**
-     * Instantiates a new Responsabile.
+     * Istanzia un oggetto responsabile
      *
-     * @param idResponsabile the id responsabile
-     * @param nome           the nome
-     * @param cognome        the cognome
-     * @param mail           the mail
+     * @param idResponsabile  id responsabile (identificativo)
+     * @param nome            nome
+     * @param cognome         cognome
+     * @param mail            mail
      */
     public Responsabile(String idResponsabile, String nome, String cognome, String mail){
         this.idResponsabile = idResponsabile;
@@ -29,9 +29,9 @@ public class Responsabile {
     }
 
     /**
-     * Get id responsabile id string.
+     * Ritorna  id responsabile.
      *
-     * @return the string
+     *
      */
 //Metodi Getter//
     public  String getIdResponsabileID(){
@@ -39,45 +39,45 @@ public class Responsabile {
     }
 
     /**
-     * Get nome string.
+     * Ritorna il nome.
      *
-     * @return the string
+     *
      */
     public String getNome(){
         return nome;
     }
 
     /**
-     * Get cognome string.
+     * Ritorna il cognome.
      *
-     * @return the string
+     *
      */
     public String getCognome(){
         return cognome;
     }
 
     /**
-     * Get mail string.
+     * Ritorna la mail
      *
-     * @return the string
+     *
      */
     public String getMail(){
         return mail;
     }
 
     /**
-     * Is disponibile boolean.
+     * Verifica se il responsabile è disponibile.
      *
-     * @return the boolean
+     *
      */
     public boolean isDisponibile(){
         return disponibile;
     }
 
     /**
-     * Set nome.
+     * Imposta il nome.
      *
-     * @param nome the nome
+     *
      */
 //metodi Setter//
     public void setNome(String nome){
@@ -85,43 +85,34 @@ public class Responsabile {
     }
 
     /**
-     * Set cognome.
+     * Imposta il cognome.
      *
-     * @param cognome the cognome
+     *
      */
     public void setCognome(String cognome){
         this.cognome = cognome;
     }
 
     /**
-     * Set mail.
+     * Imposta la mail.
      *
-     * @param mail the mail
+     *
      */
     public void setMail(String mail){
         this.mail = mail;
     }
 
     /**
-     * Set disponibile.
+     * Imposta lo stato disponibile.
      *
-     * @param disponibile the disponibile
+     *
      */
     public void setDisponibile(boolean disponibile){
         this.disponibile = disponibile;
     }
 
 
-    // Controllo disponibilià responsabile
 
-    /**
-     * Accetta incarico boolean.
-     *
-     * @return the boolean
-     */
-    public  boolean accettaIncarico(){
-        return disponibile;
-    }
 
     @Override
     public String toString(){
