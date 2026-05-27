@@ -293,15 +293,19 @@ public class Controller {
     }
 
     //seguono i metodi della classe responsabile
-    // private final ResponsabileDAO responsabileeDAO;
+    // private final ResponsabileDAO responsabileDAO;
     // public Controller(){
-    //    this.responsabileDAO = new ResponsabileDA0impl;
+    //    this.responsabileDAO = new ResponsabileDA0Impl;
     //}
 
     //aggiunge un responsabile
-    public Responsabile aggiungeResponsabile(String idResponsabile, String nome, String cognome, String mail) throws Exception {
-        Responsabile responsabile = new Responsabile(idResponsabile, nome, cognome, mail);
-        if (!responsabile.isDisponibile()) {
+    public Responsabile aggiungiResponsabile(String idResponsabile, String nome, String cognome, String mail) throws DatiResponsabileNonValidiException , Exception{
+    if(idResponsabile.isBlank() || nome.isBlank()||cognome.isBlank()||mail.isBlank()|| idResponsabile == null || nome == null || cognome == null || mail == null){
+        throw new DatiResponsabileNonValidiException("I dati del responsabile non sono validi");
+    }
+    Responsabile responsabile = new Responsabile(idResponsabile, nome, cognome, mail);
+
+    if (!responsabile.isDisponibile()) {
             throw new Exception("Dati responsabile non validi");
         }
 
@@ -324,19 +328,18 @@ public class Controller {
         if (responsabile == null) {
             throw new ResponsabileNonTrovatoException("Il responsabile non esiste" + idResponsabile);
         }
-        //da fare responsabileDao.delete(idResponsabile);
+        //da fare responsabileDAO.delete(idResponsabile);
         return true;
     }
 
     //lista di tutti i responsabili
     public List<Responsabile> getTuttiResponsabili() throws Exception {
-        // da fare return responsabileDAO.findall();
+        // da fare return responsabileDAO.findAll();
         return null;
     }
 
     //assegna un responsabile a una filiale
-    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale)
-            throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
+    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
 
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {
@@ -347,28 +350,74 @@ public class Controller {
             throw new FilialeNonTrovataException("La filiale non esiste" + codiceFiliale);
         }
         responsabile.setDisponibile(false);
-        //da fare filialeDAO.update(filiale);
-        // da fare responsabileDAO.update(responsabile);
+        //da fare poi nel dao responsabileDAO.assegnaFiliale(idResponsabile, codiceFiliale);
+        // da fare nel dao responsabileDAO.update(responsabile);
         return true;
     }
 
     //rimuove un responsabile da una filiale
-    public boolean rimuoviResponsabileDaFiliale(String idResponsabile, String codiceFiliale)
-            throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
+    public boolean rimuoviResponsabileDaFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
 
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {
-            throw new ResponsabileNonTrovatoException("la filiale non esiste" + codiceFiliale);
+            throw new ResponsabileNonTrovatoException("Il responsabile non esiste" + idResponsabile);
         }
         Filiale filiale = cercaConIdFiliale(codiceFiliale);
         if (filiale == null) {
-            throw new FilialeNonTrovataException("la filiale non esiste" + codiceFiliale);
+            throw new FilialeNonTrovataException("La filiale non esiste" + codiceFiliale);
         }
 
         responsabile.setDisponibile(true);
-        //da fare filialeDAO.update(filiale);
-        // da fare responsabileDao.update(responsabile);
+        //da fare nel dao responsabileDAO.rimuoviDaFiliale(idResponsabile, codiceFiliale);
+        // da fare in dao  responsabileDao.update(responsabile);
+        return true; // da levare poi
+    }
+
+    //metodi  per meccanico
+    // private final MeccanicoDAO meccanicoDAO;
+    //public Controller(){
+        //this.meccanicoDAO = new MeccanicoDAOImpl;
+    //}
+
+    public Meccanico aggiungiMeccanico(String idMeccanico, String nome, String cognome)throws DatiMeccanicoNonValidiException{
+        if(idMeccanico.isBlank() || nome.isBlank()||cognome.isBlank()|| idMeccanico== null || nome == null || cognome == null){
+            throw new DatiMeccanicoNonValidiException("I dati del meccanico non sono validi");
+        }
+        Meccanico meccanico = new Meccanico(idMeccanico, nome, cognome);
+        //meccanicoDAO.save(meccanico);
+        return meccanico;
+    }
+
+    public Meccanico cercaMeccanico(String idMeccanico) throws MeccanicoNonTrovatoException{
+        if(idMeccanico.isBlank()||idMeccanico == null){
+            throw new MeccanicoNonTrovatoException("Il meccanico non esiste");
+        }
+        // da fare nel dao return meccanicDAO.cerca(idMeccanico);
+        return null ;
+    }
+
+    public boolean eliminaMeccanico(String idMeccanico)throws MeccanicoNonTrovatoException{
+        if(idMeccanico.isBlank()||idMeccanico == null){
+            throw new MeccanicoNonTrovatoException("Il meccanico non esiste");
+        }
+        Meccanico meccanico = cercaMeccanico(idMeccanico);
+      //   meccanico.DAO.delete(meccanico);
         return true;
+    }
+
+    public boolean cambiaStatoMeccanico(String idMeccanico,boolean stato) throws MeccanicoNonTrovatoException{
+        if(idMeccanico.isBlank()||idMeccanico == null){
+            throw new MeccanicoNonTrovatoException("Il meccanico non esiste");
+        }
+        Meccanico meccanico = cercaMeccanico(idMeccanico);
+
+        meccanico.setDisponibile(stato);
+        return true;
+    }
+
+    public <List> Meccanico listaMeccanici(){
+       // return meccanicoDAO.trovaTutti();
+        return null;
     }
 
     //seguono i metodi della classe riparazioni e meccanico
@@ -378,86 +427,51 @@ public class Controller {
     //}
 
 
-    //assegna un meccanico a una riparazione
-    public boolean assegnaMeccanicoARiparazione(Meccanico meccanico, Riparazione riparazione)
-            throws RiparazioneNonTrovateException {
 
-        if (meccanico == null) {
-            throw new RiparazioneNonTrovateException("il meccanico non esiste.");
-        }
-        if (riparazione == null) {
-            throw new RiparazioneNonTrovateException("il meccanico non è esiste.");
-        }
-        if (!meccanico.accettaRiparazione()) {
-            throw new RiparazioneNonTrovateException("il meccanico non è disponibile.");
-        }
-        meccanico.setDisponibile(false);
-        //da fare riparazioneDAO.update(riparazione);
-        //da fare meccanicoDAO.update(meccanico);
-        return true;
-    }
-
-    //rimuovi meccanico da una riparazione
-    public boolean rimuoviMeccanicoDaRiparazione(Meccanico meccanico, Riparazione riparazione) throws RiparazioneNonTrovateException{
-
-
-            if (meccanico == null) {
-                throw new RiparazioneNonTrovateException("il meccanico non esiste.");
-            }
-            if (riparazione == null) {
-                throw new RiparazioneNonTrovateException("il meccanico non è esiste.");
-            }
-            meccanico.setDisponibile(true);
-            //da fare riparazioneDAO.update(riparazione);
-            //da fare meccanicoDAO.update(meccanico);
-            return true;
-        }
 
 
     //chiude la riparazione e aggiorna lo stato del veicolo
-    public boolean chiudiRiparazioneVeicolo(Riparazione riparazione, Meccanico meccanico, Veicolo veicolo, float costoFinale)throws RiparazioneNonTrovateException, VeicoloNonTrovatoException {
+    public boolean chiudiRiparazioneVeicolo( String targaVeicolo, float costoFinale)throws RiparazioneNonTrovateException, DatiRiparazioneNonValidiException {
 
-        if (riparazione == null) {
-            throw new RiparazioneNonTrovateException("la riparazione non esiste.");
+        if (targaVeicolo == null || targaVeicolo.isBlank() || costoFinale < 0) {
+            throw new DatiRiparazioneNonValidiException("I dati non sono validi");
         }
-        if (veicolo == null) {
-            throw new VeicoloNonTrovatoException("il veicolo non esiste.");
-        }
-
+       Riparazione riparazione = cercaRiparazionePerTarga(targaVeicolo);
         riparazione.setCostoFinale(costoFinale);
-        meccanico.setDisponibile(true);
-        veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
-        //da fare riparazioneDAO.update(riparazione);
-        //da fare meccanicoDAO.update(meccanico);
-        //da fare veicoloDAO.update(veicolo);
+        Veicolo veicolo = cercaTarga(targaVeicolo);
+        if(veicolo  != null){
+            veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
+            // veicoloDAO.update(veicolo);
+        }
+       //  riparazioneDAO.update(riparazione);
         return true;
     }
 
     //aggiunge una riparazione controllando la disponbilità del meccanico
-    public Riparazione aggiungiRiparazione(String descrizioneProblema, float costoStimato, Date dataRiparazione,
-                                           float costoFinale, Veicolo veicolo, Meccanico meccanico )throws  RiparazioneNonTrovateException{
+    public Riparazione aggiungiRiparazione(String descrizioneProblema, float costoStimato, Date dataRiparazione, float costoFinale, String targaVeicolo)throws  DatiRiparazioneNonValidiException{
 
-        if(!meccanico.accettaRiparazione()){
-            throw new RiparazioneNonTrovateException("il meccanico non è disponibile.");
+        if(descrizioneProblema == null || targaVeicolo == null || dataRiparazione == null || descrizioneProblema.isBlank() || targaVeicolo.isBlank() || costoStimato < 0 || costoFinale < 0){
+            throw new DatiRiparazioneNonValidiException("La riparazione non e' valida");
         }
-        Riparazione riparazione = new Riparazione(costoStimato, descrizioneProblema,costoFinale,
-                                                   dataRiparazione,veicolo,meccanico);
-        meccanico.setDisponibile(false);
+        Riparazione riparazione = new Riparazione(costoStimato, descrizioneProblema,costoFinale, dataRiparazione,targaVeicolo);
+        Veicolo veicolo = cercaTarga(targaVeicolo);
+        veicolo.setStatoVeicolo(StatoVeicolo.Manutenzione);
+        // da fare veicoloDAO.update(veicolo);
         //da fare riparazioniDAO.save(riparazione);
+
         return riparazione;
     }
 
-    // chiude una riparazione e libera il meccanico
-    public boolean chiudiRiparazione(Riparazione riparazione, Meccanico meccanico,
-                                     float costoFinale) throws RiparazioneNonTrovateException{
-        if(riparazione == null){
-            throw  new RiparazioneNonTrovateException("La riparazione non esiste.");
+    public Riparazione cercaRiparazionePerTarga(String targaVeicolo) throws DatiRiparazioneNonValidiException, RiparazioneNonTrovateException{
+        if (targaVeicolo == null || targaVeicolo.isBlank()) {
+            throw new DatiRiparazioneNonValidiException("La targa non è valida.");
         }
-        riparazione.setCostoFinale(costoFinale);
-        meccanico.setDisponibile(true); //meccanico torna disponibile
-        //da fare riparazioniDAO.update(riparazione);
-        //da fare meccanicoDAO.update(meccanico);
-        return true;
+        Riparazione riparazione = cercaRiparazionePerTarga(targaVeicolo);
+
+        if (riparazione == null) {
+            throw new RiparazioneNonTrovateException("Riparazione non trovata");
+        }
+        return riparazione;
     }
 
     //lista di tutte le riparazioni
@@ -465,6 +479,7 @@ public class Controller {
         //da fare return riparazioniDAO.findAll();
         return  null; //da levare
     }
+
 }
 
 

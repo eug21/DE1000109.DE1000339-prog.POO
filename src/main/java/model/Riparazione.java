@@ -8,17 +8,24 @@ public class Riparazione {
     private float costoStimato;
     private float costoFinale;
     private Date dataRiparazione;
-    private Veicolo veicolo;
-    private Meccanico meccanico;
+    private String targaVeicolo;
 
 
-    public Riparazione(float costoStimato, String descrizioneProblema, float costoFinale, Date dataRiparazione, Veicolo veicolo, Meccanico meccanico) {
+    public String getTargaVeicolo() {
+        return targaVeicolo;
+    }
+
+    public void setTargaVeicolo(String targaVeicolo) {
+        this.targaVeicolo = targaVeicolo;
+    }
+
+    public Riparazione(float costoStimato, String descrizioneProblema, float costoFinale, Date dataRiparazione, String targaVeicolo) {
         this.costoStimato = costoStimato;
         this.descrizioneProblema = descrizioneProblema;
         this.costoFinale = costoFinale;
         this.dataRiparazione = dataRiparazione;
-        this.veicolo = veicolo;
-        this.meccanico = meccanico;
+        this.targaVeicolo = targaVeicolo;
+
     }
 
     //Metodi Getter//
@@ -38,13 +45,6 @@ public class Riparazione {
         return dataRiparazione;
     }
 
-    public Veicolo getVeicolo() {
-        return veicolo;
-    }
-
-    public Meccanico getMeccanico() {
-        return meccanico;
-    }
 
     //Metodi Setter//
     public void setDescrizioneProblema(String descrizioneProblema) {
@@ -70,7 +70,6 @@ public class Riparazione {
                 "Costo stimato:" + costoStimato + "\n" +
                 "Data riparazione:" + dataRiparazione + "\n" +
                 "costo finale:" + costoFinale + "\n" +
-                " veicolo:" + veicolo + "\n" +
-                "Meccanico:" + meccanico;
+                " targa:" + targaVeicolo + "\n";
     }
 }

@@ -34,11 +34,6 @@ public class Meccanico {
         this.disponibile = disponibile;
     }
 
-// Controllo disponibilità del meccanico ad effettuare una riparazione
-    public  boolean accettaRiparazione(){
-        return disponibile;
-    }
-
     @Override
     public String toString(){
         return"Id meccanico" + idMeccanico +
