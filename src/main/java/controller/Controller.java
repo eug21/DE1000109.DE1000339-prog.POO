@@ -428,8 +428,6 @@ public class Controller {
 
 
 
-
-
     //chiude la riparazione e aggiorna lo stato del veicolo
     public boolean chiudiRiparazioneVeicolo( String targaVeicolo, float costoFinale)throws RiparazioneNonTrovateException, DatiRiparazioneNonValidiException {
 

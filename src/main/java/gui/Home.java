@@ -24,6 +24,8 @@ public class Home {
         GESTIONEDIPENDENTIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SceltaDipendente frame = new SceltaDipendente();
+                frame.setVisible(true);
 
             }
         });
