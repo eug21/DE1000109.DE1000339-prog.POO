@@ -37,6 +37,7 @@ public class AggiungiContratto extends JFrame {
     private Veicolo veicoloTrovato = null;
 
     public AggiungiContratto(){
+
         ritiroTextField.setVisible(false);
         consegnaTextField.setVisible(false);
         inizioTextField.setVisible(false);
