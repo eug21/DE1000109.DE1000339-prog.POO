@@ -22,6 +22,11 @@ public class CercaVeicolo extends JFrame {
     private Controller controller = new Controller();
 
     public CercaVeicolo(){
+        setTitle("Cerca un veicolo");
+        setContentPane(cercaVeicolo);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
         testoMarcaTextField.setVisible(false);
         testoModelloTextField.setVisible(false);
         testoTariffaTextField.setVisible(false);

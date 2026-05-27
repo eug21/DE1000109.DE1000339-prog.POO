@@ -37,6 +37,11 @@ public class AggiungiContratto extends JFrame {
     private Veicolo veicoloTrovato = null;
 
     public AggiungiContratto(){
+        setTitle("Aggiungi Contratto");
+        setContentPane(aggiungiContratto);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
 
         ritiroTextField.setVisible(false);
         consegnaTextField.setVisible(false);

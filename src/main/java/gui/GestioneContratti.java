@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GestioneContratti {
+public class GestioneContratti extends JFrame{
     private JPanel gestioneContratti;
     private JButton nuovoContrattoButton;
     private JButton cercaDate;
@@ -16,6 +16,11 @@ public class GestioneContratti {
     private Controller controller = new Controller();
 
     public GestioneContratti(){
+        setTitle("Gestione Contratti");
+        setContentPane(gestioneContratti);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
 
         nuovoContrattoButton.addActionListener(new ActionListener() {
             @Override

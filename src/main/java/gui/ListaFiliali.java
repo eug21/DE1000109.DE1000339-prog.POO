@@ -16,6 +16,11 @@ public class ListaFiliali extends  JFrame{
     private JButton eliminaSelezionataButton;
 
     public ListaFiliali() {
+        setTitle("Lista filiali");
+        setContentPane(listaFiliali);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
          Controller controller = new Controller();
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override

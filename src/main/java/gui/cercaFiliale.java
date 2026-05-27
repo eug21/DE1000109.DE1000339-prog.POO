@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
-public class cercaFiliale {
+public class cercaFiliale extends JFrame{
     private JPanel cercaFiliale;
     private JTextField testoCodiceTextField;
     private JButton cercaButton;
@@ -21,6 +21,12 @@ public class cercaFiliale {
     private JButton salvaModificheButton;
 
     public cercaFiliale(){
+        setTitle("Cerca Filiale");
+        setContentPane(cercaFiliale);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+
         Controller controller = new Controller();
         testoCAPTextField.setVisible(false);
         testoCittaTextField.setVisible(false);

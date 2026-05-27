@@ -23,7 +23,11 @@ public class CercaPerDate extends JFrame{
     private Controller controller = new Controller();
 
     public CercaPerDate(){
-
+        setTitle("Cerca contratti per date");
+        setContentPane(cercaPerDate);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
 
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override

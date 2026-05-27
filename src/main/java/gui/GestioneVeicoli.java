@@ -15,6 +15,11 @@ public class GestioneVeicoli extends JFrame {
     private Controller controller = new Controller();
 
     public GestioneVeicoli(){
+        setTitle("Gestione Veicoli");
+        setContentPane(gestioneVeicoli);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
 
         aggiungiVeicoloButton.addActionListener(new ActionListener() {
             @Override

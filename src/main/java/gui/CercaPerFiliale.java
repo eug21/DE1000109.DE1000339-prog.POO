@@ -21,6 +21,12 @@ public class CercaPerFiliale extends JFrame{
     private Controller controller = new Controller();
 
     public CercaPerFiliale() {
+
+        setTitle("Cerca contratti per filiale");
+        setContentPane(cercaPerFiliale);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

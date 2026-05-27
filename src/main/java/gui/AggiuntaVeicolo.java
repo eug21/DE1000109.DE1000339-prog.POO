@@ -26,6 +26,12 @@ public class AggiuntaVeicolo extends JFrame {
     private Controller controller = new Controller();
 
     public AggiuntaVeicolo(){
+        setTitle("Aggiungi Veicolo");
+        setContentPane(aggiuntaVeicolo);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+
         tipoCombo.addItem("Auto");
         tipoCombo.addItem("Moto");
         tipoCombo.addItem("Furgone");

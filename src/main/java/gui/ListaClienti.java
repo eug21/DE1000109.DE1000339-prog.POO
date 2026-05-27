@@ -15,6 +15,11 @@ public class ListaClienti extends JFrame {
     private JTable tabellaClienti;
 
     public ListaClienti() {
+        setTitle("Lista dei clienti");
+        setContentPane(listaClienti);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
         Controller controller = new Controller();
 
         aggiornaListaButton.addActionListener(new ActionListener() {

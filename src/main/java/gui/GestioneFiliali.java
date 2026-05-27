@@ -15,12 +15,17 @@ public class GestioneFiliali extends JFrame {
     private JTextField txtCAP;
     private JTextField txtTel;
     private JButton aggiungiFilialeButton;
-    private JPanel mainPanel;
+    private JPanel gestioneFiliali;
     private JButton listaFilialiButton;
     private JButton cercaFilialeButton;
 
 
     public GestioneFiliali() {
+        setTitle("Gestione Filiali");
+        setContentPane(gestioneFiliali);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
 
         Controller controller = new Controller();
 

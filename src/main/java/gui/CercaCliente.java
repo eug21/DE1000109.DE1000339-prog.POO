@@ -20,6 +20,12 @@ public class CercaCliente extends  JFrame{
 
     private Controller controller = new Controller();
     public CercaCliente(){
+        setTitle("Cerca Cliente");
+        setContentPane(cercaCliente);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+
         nomeTesto.setVisible(false);
         cognomeTesto.setVisible(false);
         fiscaleTesto.setVisible(false);

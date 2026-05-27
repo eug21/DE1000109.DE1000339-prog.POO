@@ -21,6 +21,11 @@ public class ListaVeicolo extends JFrame {
     private Controller controller = new Controller();
 
     public ListaVeicolo(){
+        setTitle("Lista veicoli");
+        setContentPane(listaVeicolo);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
         Object[][] righe = {};
         String[] colonne = {"Targa", "Marca", "Modello", "Tariffa", "Stato"};
 
