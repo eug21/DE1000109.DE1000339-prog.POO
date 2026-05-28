@@ -32,6 +32,8 @@ public class SceltaDipendente extends JFrame{
         meccanicoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GestioneMeccanico frame = new GestioneMeccanico();
+                frame.setVisible(true);
 
             }
         });
