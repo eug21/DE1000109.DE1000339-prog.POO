@@ -34,7 +34,7 @@ public class GestioneVeicoli extends JFrame {
         listaVeicoliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneVeicoli frame = new GestioneVeicoli();
+                ListaVeicolo frame = new ListaVeicolo();
                 frame.setVisible(true);
 
             }
