@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,8 +10,8 @@ public class ConnessioneDatabase {
 	private static ConnessioneDatabase instance;
 	public Connection connection = null;
 	private String nome = "postgres";
-	private String password = "password";
-	private String url = "jdbc:postgresql://localhost:5433/Borsa";
+	private String password = "Cesare2010!";
+	private String url = "jdbc:postgresql://localhost:5432/noleggioVeicoli";
 	private String driver = "org.postgresql.Driver";
 
 	// COSTRUTTORE

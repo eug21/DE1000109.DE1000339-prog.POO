@@ -1,6 +1,6 @@
 //package implementazioniPostgresDAO;
 
-import Database.ConnessioneDatabase;
+import database.ConnessioneDatabase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
