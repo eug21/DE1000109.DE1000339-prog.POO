@@ -2,7 +2,11 @@ package controller;
 
 
 //import per i metodi di Cliente
+import dao.ClienteDAO;
+import dao.FilialeDAO;
 import exception.*;
+import implementazionePostgresDAO.ClienteDAOImpl;
+import implementazionePostgresDAO.FilialeDAOImpl;
 import model.Cliente;
 import model.TipoPatente;
 
@@ -10,6 +14,7 @@ import model.TipoPatente;
 import model.Veicolo;
 import model.StatoVeicolo;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -34,10 +39,12 @@ import dao.RiparazioneDAO;
 
 public class Controller {
 
-    //private final ClienteDAO clienteDAO;
-    //public Controller (){
-    // this.clienteDAO = newClienteDAOImpl;
-    // }
+    private final ClienteDAO clienteDAO;
+    private final FilialeDAO filialeDAO;
+    public Controller (FilialeDAO filialeDAO) throws SQLException{
+        this.filialeDAO = new FilialeDAOImpl();
+        this.clienteDAO = new ClienteDAOImpl();
+     }
 
 
     //registrazione cliente
@@ -48,19 +55,18 @@ public class Controller {
             throw new Exception("Dati cliente non validi.");
 
         }
-        //da fare nel dao clienteDAO.save(cliente);
+        clienteDAO.save(cliente);
         return cliente;
 
     }
 
     //ricerco i clienti per numero di patente che uso come PK
 
-    public Cliente ricercaPerPatente(String numPatente) throws ClienteNonTrovatoException {
+    public Cliente ricercaPerPatente(String numPatente) throws ClienteNonTrovatoException, SQLException {
         if (numPatente == null || numPatente.isBlank()) {
             throw new ClienteNonTrovatoException("Numero patente non valido.");
         }
-        Cliente cliente = null;
-        //Cliente cliente = clienteDAO.trovaPerPatente(numPatente);
+        Cliente cliente = clienteDAO.trovaPerPatente(numPatente);
 
         if (cliente == null) {
             throw new ClienteNonTrovatoException("Il cliente non esiste " + numPatente);
@@ -71,18 +77,16 @@ public class Controller {
     }
 
     //elimina un cliente dal db
-    public boolean eliminaCliente(String numPatente) throws ClienteNonTrovatoException {
-        // Cliente cliente = ricercaPerPatente(numPatente);
+    public boolean eliminaCliente(String numPatente) throws ClienteNonTrovatoException, SQLException {
+        Cliente cliente = ricercaPerPatente(numPatente);
         //da aggiungere verifica di contratti attivi
 
-        // return clienteDAO.delete(numPatente); //da fare nel dao
-        return true;
+        return clienteDAO.delete(numPatente);
     }
 
     //trova tutti i clienti
     public List<Cliente> getTuttiClienti() throws Exception {
-        // da fare return clienteDAO.findAll();
-        return null; // da levare
+        return clienteDAO.findAll();
     }
 
 
@@ -153,32 +157,28 @@ public class Controller {
     }
 
     //seguono i metodi della classe filiale
-    // private final FilialeDAO filialeDAO;
-    // public Controller(){
-    //    this.filialeDAO = new FilialeDAOImpl;
-    //}
+
 
     //aggiungere una filiale a db
-    public Filiale aggiungiFiliale(String codiceFiliale, String via, String citta, String cap, String numeroTelefono) throws DatiFilialeNonValidaException {
+    public Filiale aggiungiFiliale(String codiceFiliale, String via, String citta, String cap, String numeroTelefono) throws DatiFilialeNonValidaException, SQLException {
         Filiale filiale = new Filiale(codiceFiliale, via, citta, cap, numeroTelefono);
         if (!filiale.verificaDatiFiliale()) {
             throw new DatiFilialeNonValidaException("I dati inseriti non sono validi. ");
         }
-        // da fare filialeDAO.save(filiale);
+        filialeDAO.save(filiale);
         return filiale;
     }
 
     //ricerca di una filiale mediante il suo codice univoco nel db
-    public Filiale cercaConIdFiliale(String codiceFiliale) throws FilialeNonTrovataException {
+    public Filiale cercaConIdFiliale(String codiceFiliale) throws FilialeNonTrovataException, SQLException {
         if (codiceFiliale == null || codiceFiliale.isBlank()) {
             throw new FilialeNonTrovataException("La filiale non esiste.");
         }
-        // da fare nel dao return filialeDAO.trovaPerCodice(codiceFiliale);
-        return null; //da levare
+        return filialeDAO.trovaPerCodice(codiceFiliale);
     }
 
     //eliminazione di una filiale dal db
-    public boolean eliminaFiliale(String codiceFiliale) throws FilialeNonTrovataException {
+    public boolean eliminaFiliale(String codiceFiliale) throws FilialeNonTrovataException, SQLException {
         Filiale filiale = cercaConIdFiliale(codiceFiliale);
         if (filiale == null) {
             throw new FilialeNonTrovataException("La filiale non esiste. ");
@@ -188,7 +188,7 @@ public class Controller {
     }
 
     //modifica dei dati di una filiale
-    public boolean modificaDatiFiliale(String nuovoCodice, String nuovaVia, String nuovoCap, String nuovaCitta, String nuovoNumTelefono, String codiceFiliale) throws DatiFilialeNonValidaException, FilialeNonTrovataException {
+    public boolean modificaDatiFiliale(String nuovoCodice, String nuovaVia, String nuovoCap, String nuovaCitta, String nuovoNumTelefono, String codiceFiliale) throws DatiFilialeNonValidaException, FilialeNonTrovataException, SQLException {
         Filiale filiale = cercaConIdFiliale(codiceFiliale);
         if (filiale == null) {
             throw new FilialeNonTrovataException("La filiale non esiste. ");
@@ -205,14 +205,13 @@ public class Controller {
         filiale.setVia(nuovaVia);
         filiale.setNumeroTelefono(nuovoNumTelefono);
 
-        // da fare nel dao  filialeDAO.update(filiale);
+        filialeDAO.update(filiale);
         return true;
     }
 
     //lista di tutte le filiali presenti a db
-    public List<Filiale> getFiliali() {
-        //return filialeDAO.getAll();
-        return null;
+    public List<Filiale> getFiliali() throws SQLException {
+        return filialeDAO.getAll();
     }
 
     //seguono tutti i metodi che consentono di manipoalare i contratti
@@ -339,7 +338,7 @@ public class Controller {
     }
 
     //assegna un responsabile a una filiale
-    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
+    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException, SQLException {
 
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {
@@ -356,7 +355,7 @@ public class Controller {
     }
 
     //rimuove un responsabile da una filiale
-    public boolean rimuoviResponsabileDaFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
+    public boolean rimuoviResponsabileDaFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException, SQLException {
 
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {

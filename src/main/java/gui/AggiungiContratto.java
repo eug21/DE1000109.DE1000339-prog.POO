@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 
@@ -36,7 +37,7 @@ public class AggiungiContratto extends JFrame {
     private Cliente clienteTrovato = null;
     private Veicolo veicoloTrovato = null;
 
-    public AggiungiContratto(){
+    public AggiungiContratto() {
         setTitle("Aggiungi Contratto");
         setContentPane(aggiungiContratto);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
