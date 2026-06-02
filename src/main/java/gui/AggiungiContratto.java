@@ -57,10 +57,16 @@ public class AggiungiContratto extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String patente = (String) testoPatenteTextField.getText().trim();
                 try{
-                    clienteTrovato = controller.ricercaPerPatente(patente);
+                    try {
+                        clienteTrovato = controller.ricercaPerPatente(patente);
+                    } catch (ClienteNonTrovatoException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     cliente.setText(clienteTrovato.getNome() + " " + clienteTrovato.getCognome());
 
-                } catch (ClienteNonTrovatoException eccezione) {
+                } catch (ClienteNonTrovatoException | SQLException eccezione) {
                     JOptionPane.showMessageDialog(null, "Il cliente non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                     clienteTrovato = null;
                 }
