@@ -1,7 +1,7 @@
 package implementazionePostgresDAO;
 
 import dao.ResponsabileDAO;
-import model Responsabile;
+import model.Responsabile;
 import database.ConnessioneDatabase;
 
 import java.sql.*;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReposnabileDAOImpl implements ResponsabileDAO{
+public class ResponsabileDAOImpl implements ResponsabileDAO{
 
     private connection connection;
 
