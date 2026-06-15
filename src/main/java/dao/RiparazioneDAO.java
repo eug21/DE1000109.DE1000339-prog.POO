@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface RiparazioneDAO {
     void save(Riparazione riparazione) throws SQLException;
-    List<Riparazione> finAll() throws SQLException;
     boolean delete(int id) throws SQLException;
+    boolean update(Riparazione riparazione) throws  SQLException;
+    List<Riparazione> finAll() throws SQLException;
 }

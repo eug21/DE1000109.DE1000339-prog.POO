@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MeccanicoDAOImpl implementsMeccanicoDAO{
 
-    private connection connection;
+    private Connection connection;
 
     public MeccanicoDAOImpl(){
         try {
@@ -67,7 +67,7 @@ public class MeccanicoDAOImpl implementsMeccanicoDAO{
     }
 
     @override
-    public List<Meccanico> findALL() throws SQLException{
+    public List<Meccanico> findAll() throws SQLException{
         List<Meccanico> lista = new ArrayList<>();
         String sql = "SELECT * FROM Meccanico";
 
