@@ -2,11 +2,14 @@ package gui;
 
 import controller.Controller;
 import exception.MeccanicoNonTrovatoException;
+import model.Filiale;
+import model.Meccanico;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ListaMeccanici extends JFrame{
     private JButton aggiornaListaButton;
@@ -29,10 +32,18 @@ public class ListaMeccanici extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"ID Meccanico", "Nome", "Cognome"};
-                Object [][] righe = {};
-
-                tab.setModel(new DefaultTableModel(righe, colonne));
+                DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                List<Meccanico> lista = controller.listaMeccanici();
+                if(lista != null){
+                    for (Meccanico m: lista){
+                        modello.addRow(new Object[]{ m.getIdMeccanico(),
+                                m.getNome(),
+                                m.getCognome()});
+                    }
+                }
+                tab.setModel(modello);
             }
+
         });
         eliminaSelezionatoButton.addActionListener(new ActionListener() {
             @Override

@@ -92,7 +92,7 @@ public class Controller {
     }
 
     //trova tutti i clienti
-    public List<Cliente> getTuttiClienti() throws Exception {
+    public List<Cliente> getTuttiClienti(){
         return clienteDAO.findAll();
     }
 
@@ -207,7 +207,7 @@ public class Controller {
     }
 
     //lista di tutte le filiali presenti a db
-    public List<Filiale> getFiliali() throws Exception {
+    public List<Filiale> getFiliali()  {
         return filialeDAO.getAll();
     }
 
@@ -319,7 +319,7 @@ public class Controller {
     }
 
     //lista di tutti i responsabili
-    public List<Responsabile> getTuttiResponsabili() throws Exception {
+    public List<Responsabile> getTuttiResponsabili()  {
        return responsabileDAO.findAll();
     }
 
@@ -450,7 +450,7 @@ public class Controller {
     }
 
     //lista di tutte le riparazioni
-    public List<Riparazione> getTutteRiparazioni() throws Exception{
+    public List<Riparazione> getTutteRiparazioni(){
       return riparazioneDAO.findAll();
 
     }

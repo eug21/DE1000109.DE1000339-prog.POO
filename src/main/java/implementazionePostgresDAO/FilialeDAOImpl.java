@@ -26,13 +26,13 @@ public class FilialeDAOImpl implements FilialeDAO {
 
     @Override
     public void save(Filiale filiale) {
-        String sql = "INSERT INTO Filiale (codiceFiliale, via, citta, cap, numeroTelefono" + "VALUES (?, ?, ?, ?,?)";
+        String sql = "INSERT INTO Filiale (codiceFiliale, via, citta, cap, numeroTelefono)" + "VALUES (?, ?, ?, ?,?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, filiale.getCodiceFiliale());
             statement.setString(2, filiale.getVia());
             statement.setString(3, filiale.getCitta());
-            statement.setString(4, filiale.getCap());
+            statement.setInt(4, Integer.parseInt(filiale.getCap()));
             statement.setString(5, filiale.getNumeroTelefono());
             statement.executeUpdate();
         }

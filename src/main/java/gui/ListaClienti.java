@@ -2,11 +2,14 @@ package gui;
 
 import controller.Controller;
 import exception.ClienteNonTrovatoException;
+import model.Cliente;
+import model.Filiale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ListaClienti extends JFrame {
     private JPanel listaClienti;
@@ -26,10 +29,20 @@ public class ListaClienti extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Numero Patente", "Nome", "Cognome", "Codice Fiscale", "Tipo Patente"};
-                Object[][] righe = {};
-
-                tabellaClienti.setModel( new DefaultTableModel(righe, colonne));
+                DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                List<Cliente> lista = controller.getTuttiClienti();
+                if(lista != null){
+                    for (Cliente cliente: lista){
+                        modello.addRow(new Object[]{ cliente.getNumeroPatente(),
+                                cliente.getNome(),
+                                cliente.getCognome(),
+                                cliente.getCodiceFiscale(),
+                                cliente.getTipoPatente()});
+                    }
+                }
+                tabellaClienti.setModel(modello);
             }
+
         });
 
         eliminaClienteButton.addActionListener(new ActionListener() {

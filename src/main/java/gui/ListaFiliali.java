@@ -4,10 +4,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 import controller.Controller ;
 import exception.FilialeNonTrovataException;
+import model.Filiale;
 
 public class ListaFiliali extends  JFrame{
     private JPanel listaFiliali;
@@ -26,8 +28,19 @@ public class ListaFiliali extends  JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"CODICE", "VIA", "CITTA", "CAP", "TELEFONO"};
-                Object[] [] dati = {};
-                filialiTable.setModel(new DefaultTableModel(dati, colonne));
+
+                DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                List<Filiale> lista = controller.getFiliali();
+                if(lista != null){
+                    for (Filiale f: lista){
+                       modello.addRow(new Object[]{ f.getCodiceFiliale(),
+                        f.getVia(),
+                        f.getCitta(),
+                        f.getCap(),
+                        f.getNumeroTelefono()});
+                    }
+                }
+                filialiTable.setModel(modello);
             }
         });
 

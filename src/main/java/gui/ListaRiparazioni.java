@@ -3,11 +3,14 @@ package gui;
 import controller.Controller;
 import exception.MeccanicoNonTrovatoException;
 import exception.RiparazioneNonTrovateException;
+import model.Filiale;
+import model.Riparazione;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ListaRiparazioni extends JFrame {
     private JPanel lista;
@@ -28,9 +31,18 @@ public class ListaRiparazioni extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Problema", "Costo stimato", "Costo finale", "Targa", "Data riparazione"};
-                Object[][] righe = {};
-
-                table1.setModel(new DefaultTableModel(righe, colonne));
+                DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                List<Riparazione> lista = controller.getTutteRiparazioni();
+                if(lista != null){
+                    for (Riparazione r: lista){
+                        modello.addRow(new Object[]{ r.getDescrizioneProblema(),
+                                r.getCostoStimato(),
+                                r.getCostoFinale(),
+                                r.getTargaVeicolo(),
+                                r.getDataRiparazione()});
+                    }
+                }
+                table1.setModel(modello);
             }
         });
         chiudiSelezionataButton.addActionListener(new ActionListener() {

@@ -3,11 +3,14 @@ package gui;
 import controller.Controller;
 import exception.ClienteNonTrovatoException;
 import exception.ResponsabileNonTrovatoException;
+import model.Filiale;
+import model.Responsabile;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ListaResponsabili extends JFrame {
     private JPanel listaResponsabili;
@@ -28,11 +31,21 @@ public class ListaResponsabili extends JFrame {
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String [] colonne = {"Id Responsabile", "Nome", "Cognome"};
-                Object[][] righe = {};
-
-                table1.setModel( new DefaultTableModel(righe, colonne));
+                String [] colonne = {"Id Responsabile", "Nome", "Cognome", "Mail"};
+                DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                List<Responsabile> lista = controller.getTuttiResponsabili();
+                if(lista != null){
+                    for (Responsabile r: lista){
+                        modello.addRow(new Object[]{ r.getIdResponsabileID(),
+                                r.getNome(),
+                                r.getCognome(),
+                                r.getMail()});
+                    }
+                }
+                table1.setModel(modello);
             }
+
+
         });
         eliminaSelezionatoButton.addActionListener(new ActionListener() {
             @Override

@@ -57,6 +57,13 @@ public class GestioneFiliali extends JFrame {
                 frame.setVisible(true);
             }
         });
+        cercaFilialeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cercaFiliale frame = new cercaFiliale();
+                frame.setVisible(true);
+            }
+        });
     }
 
 }
