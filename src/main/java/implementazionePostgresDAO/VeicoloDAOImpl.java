@@ -24,7 +24,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
 
     @Override
     public void save(Veicolo veicolo) {
-        String sql = "INSERT INTO Veicolo (targaVeicolo, marca, modello, tariffaDie, statoVeicolo," + "tipoVeicolo, numeroPorte, cilindrata, capacitaCarico)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Veicolo (targa, marca, modello, tariffaDie, statoVeicolo," + "tipoVeicolo, numeroPorte, cilindrata, capacitaCarico)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, veicolo.getTarga());
@@ -60,7 +60,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
 
     @Override
     public Veicolo trovaPerTarga(String targa) {
-        String sql = "SELECT * FROM Veicolo WHERE targaVeicolo = ? ";
+        String sql = "SELECT * FROM Veicolo WHERE targa = ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, targa);
@@ -81,7 +81,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
     @Override
     public void update(Veicolo veicolo)  {
 
-        String sql = "UPDATE Veicolo SET marca = ?, modello = ?, tariffaDie = ?, statoVeicolo = ?" + "WHERE targaVeicolo = ? ";
+        String sql = "UPDATE Veicolo SET marca = ?, modello = ?, tariffaDie = ?, statoVeicolo = ?" + " WHERE targa = ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, veicolo.getMarca());
@@ -100,7 +100,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
 
     @Override
     public void delete(String targa)  {
-        String sql = "DELETE FROM Veicolo WHERE targaVeicolo = ? ";
+        String sql = "DELETE FROM Veicolo WHERE targa = ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, targa);
@@ -137,7 +137,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
 
 
     private Veicolo estraiResultVeicolo(ResultSet result) throws SQLException{
-        String targa = result.getString("targaVeicolo");
+        String targa = result.getString("targa");
         String modello = result.getString("modello");
         String marca = result.getString("marca");
         BigDecimal tariffa = result.getBigDecimal("tariffaDie");

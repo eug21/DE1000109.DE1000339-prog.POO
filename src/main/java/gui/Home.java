@@ -12,6 +12,7 @@ public class Home {
     private JButton GESTIONEFILIALIButton;
     private JButton GESTIONEVEICOLIButton;
     private JButton GESTIONERIPARAZIONIButton;
+    private JButton GESTIONECONTRATTIButton;
 
     public Home() {
         GESTIONECLIENTIButton.addActionListener(new ActionListener() {
@@ -48,6 +49,13 @@ public class Home {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GestioneRiparazione frame = new GestioneRiparazione();
+                frame.setVisible(true);
+            }
+        });
+        GESTIONECONTRATTIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GestioneContratti frame = new GestioneContratti();
                 frame.setVisible(true);
             }
         });

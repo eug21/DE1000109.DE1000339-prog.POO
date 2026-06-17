@@ -44,13 +44,13 @@ public class AggiungiContratto extends JFrame {
         pack();
         setLocationRelativeTo(null);
 
-        ritiroTextField.setVisible(false);
-        consegnaTextField.setVisible(false);
-        inizioTextField.setVisible(false);
-        fineTextField.setVisible(false);
-        calcolaPrezzoButton.setVisible(false);
-        stima.setVisible(false);
-        confermaButton.setVisible(false);
+        ritiroTextField.setVisible(true);
+        consegnaTextField.setVisible(true);
+        inizioTextField.setVisible(true);
+        fineTextField.setVisible(true);
+        calcolaPrezzoButton.setVisible(true);
+        stima.setVisible(true);
+        confermaButton.setVisible(true);
 
         cercaClienteButton.addActionListener(new ActionListener() {
             @Override
@@ -87,6 +87,7 @@ public class AggiungiContratto extends JFrame {
         calcolaPrezzoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 try{
                     LocalDate dataInizio = LocalDate.parse(inizioTextField.getText().trim());
                     LocalDate dataFine = LocalDate.parse(fineTextField.getText().trim());

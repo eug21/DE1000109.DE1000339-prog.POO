@@ -36,7 +36,7 @@ public class AggiuntaVeicolo extends JFrame {
         tipoCombo.addItem("Moto");
         tipoCombo.addItem("Furgone");
 
-        porteTesto.setVisible(false);
+        porteTesto.setVisible(true);
         cilindrataTesto.setVisible(false);
         capacitaTesto.setVisible(false);
 
