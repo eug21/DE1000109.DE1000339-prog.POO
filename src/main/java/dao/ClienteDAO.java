@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ClienteDAO {
-    void save(Cliente cliente) throws SQLException;
-    Cliente trovaPerPatente (String numeroPatente) throws SQLException;
-    boolean delete(String numeroPatente) throws SQLException;
-    List <Cliente> findAll() throws SQLException;
+    void save(Cliente cliente);
+    Cliente trovaPerPatente (String numeroPatente) ;
+    boolean delete(String numeroPatente) ;
+    List <Cliente> findAll() ;
 }

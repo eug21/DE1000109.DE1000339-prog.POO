@@ -21,23 +21,27 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
         }
     }
 
-    @Ovveride
-    public void save(Responsabile responsabile) throws SQLException {
+    @Override
+    public void save(Responsabile responsabile) {
         String sql ="INSERT INTO Responsabile (idResponsabile, nome, cognome, mail) VALUES (?,?,?,?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, responsabile.getIdResponsabile());
+            statement.setString(1, responsabile.getIdResponsabileID());
             statement.setString(2, responsabile.getNome());
             statement.setString(3, responsabile.getCognome());
-            statement.setString(4, responsabile.getMil());
+            statement.setString(4, responsabile.getMail());
             statement.executeUpdate();
 
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile salvare il responsabile.", ex);
         }
 
     }
 
-    @override
-    public Responsabile trovaPerID(String idResponsabile) throws SQLException{
+    @Override
+    public Responsabile trovaPerID(String idResponsabile){
         String sql = "SELECT * FROM Responsabile WHERE idResponsabile = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -49,51 +53,67 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
                 }
             }
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile trovare il responsabile.", ex);
+        }
         return null;
     }
 
-    @override
+    @Override
 
-    public boolean delete(String idResponsabile) throws SQLException{
+    public boolean delete(String idResponsabile){
         String sql = "DELETE FROM Responsabile WHERE idResponsabile =?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, idResponsabile);
             statement.executeUpdate();
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile eliminare il responsabile.", ex);
+        }
         return  true;
     }
 
     @Override
-    public List<Responsabile> findAll() throws SQLException{
+    public List<Responsabile> findAll(){
         List<Responsabile> lista = new ArrayList<>();
         String sql = "SELECT * FROM Responsabile";
 
-        try(Statement statement = connection.createStatement;
-            ResultSet result = statement.executeQuery(sql)){
+        try(Statement statement = connection.prepareStatement(sql)){
+            ResultSet result = statement.executeQuery(sql);
             while (result.next()){
                 lista.add(estraiResponsabile(result));
             }
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile generare la lista dei responsabili.", ex);
         }
         return lista;
     }
 
     @Override
-    public boolean update(Responsabile responsabile) throws SQLException{
+    public boolean update(Responsabile responsabile){
         String sql = "UPDATE Responsabile SET nome= ?, cognome=?, mail = ? WHERE idResponsabile = ?";
 
    try (PreparedStatement statement = connection.prepareStatement(sql)){
        statement.setString(1, responsabile.getNome());
-       statement.setString(2, idResponsabile.getCognome());
+       statement.setString(2, responsabile.getCognome());
        statement.setString(3, responsabile.getMail());
-       statement.setString(4, responsabile.getIdResponsabile());
+       statement.setString(4, responsabile.getIdResponsabileID());
        statement.executeUpdate();
+   }
+   catch(SQLException ex){
+       ex.printStackTrace();
+       throw new RuntimeException("Impossibile modificare il responsabile.", ex);
    }
    return true;
 }
 
     @Override
-    public boolean assegnaFiliale(String idResponsabile, String codiceFiliale) throws SQLException {
+    public boolean assegnaFiliale(String idResponsabile, String codiceFiliale) {
         String sql = "UPDATE Responsabile SET codiceFiliale = ? WHERE idResponsabile = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -101,16 +121,24 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
             statement.setString(2, idResponsabile);
             statement.executeUpdate();
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile assegnare il responsabile.", ex);
+        }
         return true;
     }
 
     @Override
-    public boolean rimuoviFiliale(String idResponsabile) throws SQLException{
+    public boolean rimuoviDaFiliale(String idResponsabile){
         String sql = "UPDATE Responsabile SET codiceFiliale = NULL WHERE idResponsabile = ?";
 
-        try(preparedStatement statement = connection.preparedStatement(sql){
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
         statement.setString(1, idResponsabile);
         statement.executeUpdate();
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile rimuovere il responsabile.", ex);
         }
         return true;
     }
@@ -119,8 +147,10 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
         return new Responsabile(
                 result.getString("idResponsabile"),
                 result.getString("nome"),
-                result.getString("cognome")
+                result.getString("cognome"),
+                result.getString("mail")
         );
 
     }
 }
+

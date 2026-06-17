@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface FilialeDAO {
 
-    void save(Filiale filiale) throws SQLException;
-    Filiale trovaPerCodice(String codiceFiliale) throws SQLException;
-    void delete (String codicFiliale) throws SQLException;
-    void update (Filiale filiale) throws SQLException;
-    List <Filiale> getAll() throws SQLException;
+    void save(Filiale filiale);
+    Filiale trovaPerCodice(String codiceFiliale);
+    void delete (String codicFiliale);
+    void update (Filiale filiale);
+    List <Filiale> getAll();
 
 }

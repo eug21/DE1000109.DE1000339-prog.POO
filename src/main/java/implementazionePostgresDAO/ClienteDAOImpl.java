@@ -24,7 +24,7 @@ public class ClienteDAOImpl implements ClienteDAO {
         }
     }
     @Override
-    public void save(Cliente cliente) throws SQLException {
+    public void save(Cliente cliente) {
         String sql = "INSERT INTO Cliente (nome, cognome, codiceFiscale, tipoPatente, numeroPatente)" + "VALUES (?, ?, ?, ?, ?) ";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, cliente.getNome());
@@ -33,12 +33,16 @@ public class ClienteDAOImpl implements ClienteDAO {
             statement.setString(4, String.valueOf(cliente.getTipoPatente()));
             statement.setString(5, cliente.getNumeroPatente());
             statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile salvare il cliente", ex);
+
         }
 
     }
 
     @Override
-    public Cliente trovaPerPatente(String numeroPatente) throws SQLException {
+    public Cliente trovaPerPatente(String numeroPatente) {
         String sql = "SELECT * FROM Cliente WHERE numeroPatente = ?";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, numeroPatente);
@@ -48,23 +52,28 @@ public class ClienteDAOImpl implements ClienteDAO {
                 }
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Impossibile trovare il cliente.",e);
         }
         return null;
     }
 
     @Override
-    public boolean delete(String numeroPatente) throws SQLException {
+    public boolean delete(String numeroPatente){
         String sql = "DELETE FROM Cliente WHERE numeroPatente= ? ";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, numeroPatente);
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Impossibile eliminare il cliente",e);
         }
 
         return false;
     }
 
     @Override
-    public List<Cliente> findAll() throws SQLException {
+    public List<Cliente> findAll(){
         String sql = "SELECT * FROM Cliente";
         List <Cliente> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -73,6 +82,8 @@ public class ClienteDAOImpl implements ClienteDAO {
             while(result.next()){
                 lista.add(estraiResultCliente(result)   );
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore nel caricamento dei clienti.", e);
         }
         return lista;
     }

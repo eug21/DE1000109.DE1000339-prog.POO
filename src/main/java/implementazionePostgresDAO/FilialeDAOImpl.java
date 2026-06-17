@@ -25,7 +25,7 @@ public class FilialeDAOImpl implements FilialeDAO {
     }
 
     @Override
-    public void save(Filiale filiale) throws SQLException {
+    public void save(Filiale filiale) {
         String sql = "INSERT INTO Filiale (codiceFiliale, via, citta, cap, numeroTelefono" + "VALUES (?, ?, ?, ?,?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -36,10 +36,14 @@ public class FilialeDAOImpl implements FilialeDAO {
             statement.setString(5, filiale.getNumeroTelefono());
             statement.executeUpdate();
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile salvare la filiale.", ex);
+        }
     }
 
     @Override
-    public Filiale trovaPerCodice(String codiceFiliale) throws SQLException {
+    public Filiale trovaPerCodice(String codiceFiliale) {
         String sql = "SELECT * FROM Filiale WHERE codiceFiliale = ? ";
         try(PreparedStatement statement= connection.prepareStatement(sql)){
             statement.setString(1, codiceFiliale);
@@ -50,21 +54,29 @@ public class FilialeDAOImpl implements FilialeDAO {
                 }
             }
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile trovare la filiale.", ex);
+        }
         return null;
     }
 
     @Override
-    public void delete(String codiceFiliale) throws SQLException {
+    public void delete(String codiceFiliale)  {
         String sql = "DELETE FROM Filiale WHERE codiceFiliale = ? ";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, codiceFiliale);
             statement.executeUpdate();
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile eliminare la filiale.", ex);
+        }
 
     }
 
     @Override
-    public void update(Filiale filiale) throws SQLException {
+    public void update(Filiale filiale) {
         String sql = "UPDATE Filiale SET via = ? , citta = ? , cap = ?, numeroTelefono = ?" + "WHERE codiceFiliale  = ? ";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, filiale.getVia());
@@ -74,11 +86,15 @@ public class FilialeDAOImpl implements FilialeDAO {
             statement.setString(5, filiale.getCodiceFiliale());
             statement.executeUpdate();
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile aggiornare la filiale.", ex);
+        }
 
     }
 
     @Override
-    public List<Filiale> getAll() throws SQLException {
+    public List<Filiale> getAll()  {
         String sql = "SELECT * FROM Filiale";
         List <Filiale> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -87,6 +103,10 @@ public class FilialeDAOImpl implements FilialeDAO {
             while(result.next()){
                 lista.add(estraiResult(result));
             }
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile generare la lista delle filiali.", ex);
         }
         return lista;
     }

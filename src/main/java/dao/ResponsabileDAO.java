@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ResponsabileDAO{
-    void save(Responsabile responsabile) throws SQLException;
-    Responsabile trovaPerID(String idResponsabile) throws  SQLException;
-    boolean delete(String idResponsabile) throws SQLException;
-    List<Responsabile> findALL() throws SQLException;
-    boolean update(Responsabile responsabile) throws SQLException;
-    boolean assegnaFiliale(String idResponsabile, String codiceFiliale) throws SQLException;
-    boolean rimuoviDaFiliale(String idResponsabile) throws SQLException;
+    void save(Responsabile responsabile);
+    Responsabile trovaPerID(String idResponsabile);
+    boolean delete(String idResponsabile) ;
+    List<Responsabile> findAll();
+    boolean update(Responsabile responsabile);
+    boolean assegnaFiliale(String idResponsabile, String codiceFiliale);
+    boolean rimuoviDaFiliale(String idResponsabile);
 
 }

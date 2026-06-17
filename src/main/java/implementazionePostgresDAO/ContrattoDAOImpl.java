@@ -24,7 +24,7 @@ public class ContrattoDAOImpl implements ContrattoDAO {
     }
 
     @Override
-    public void save(Contratto contratto) throws SQLException {
+    public void save(Contratto contratto) {
         String sql = "INSERT INTO Contratto (idFilialeRitiro, idFilialeConsegna, targaVeicolo, dataInizio, dataFine, prezzo)" + "VALUES (?, ?, ?, ?, ?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, contratto.getIdFilialeRitiro());
@@ -35,20 +35,27 @@ public class ContrattoDAOImpl implements ContrattoDAO {
             statement.setBigDecimal(6, contratto.getPrezzo());
             statement.executeUpdate();
         }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile salvare il cliente.", ex);
+        }
     }
 
     @Override
-    public void chiudi(Contratto contratto) throws SQLException {
+    public void chiudi(Contratto contratto) {
         String sql = "DELETE FROM Contratto WHERE targaVeicolo = ?";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, contratto.getTargaVeicolo());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Impossibile chiudere il contratto.", e);
         }
 
     }
 
     @Override
-    public List<Contratto> trovaPerCliente(String numeroPatente) throws SQLException {
+    public List<Contratto> trovaPerCliente(String numeroPatente) {
         String sql = "SELECT * FROM Contratto WHERE numeroPatente = ?";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -59,11 +66,15 @@ public class ContrattoDAOImpl implements ContrattoDAO {
                 }
             }
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile creare la lista.", ex);
+        }
         return lista;
     }
 
     @Override
-    public List<Contratto> trovaPerFiliale(String codiceFiliale) throws SQLException {
+    public List<Contratto> trovaPerFiliale(String codiceFiliale) {
             String sql = "SELECT * FROM Contratto WHERE idFilialeRitiro = ? OR idFilialeConsegna = ?";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -75,11 +86,15 @@ public class ContrattoDAOImpl implements ContrattoDAO {
                 }
             }
         }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile creare la lista.", ex);
+        }
         return lista;
     }
 
     @Override
-    public List<Contratto> trovaPerPeriodo(LocalDate dataInizio, LocalDate dataFine) throws SQLException {
+    public List<Contratto> trovaPerPeriodo(LocalDate dataInizio, LocalDate dataFine) {
         String sql = "SELECT * FROM Contratto WHERE dataInizio >= ? AND dataFine <= ?";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -90,6 +105,10 @@ public class ContrattoDAOImpl implements ContrattoDAO {
                     lista.add(estraiResulContratto(result));
                 }
             }
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile creare la lista.", ex);
         }
         return lista;
     }

@@ -23,7 +23,7 @@ public class VeicoloDAOImpl implements VeicoloDAO {
     }
 
     @Override
-    public void save(Veicolo veicolo) throws SQLException {
+    public void save(Veicolo veicolo) {
         String sql = "INSERT INTO Veicolo (targaVeicolo, marca, modello, tariffaDie, statoVeicolo," + "tipoVeicolo, numeroPorte, cilindrata, capacitaCarico)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -52,10 +52,14 @@ public class VeicoloDAOImpl implements VeicoloDAO {
             statement.executeUpdate();
 
         }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile salvare il veicolo.", ex);
+        }
     }
 
     @Override
-    public Veicolo trovaPerTarga(String targa) throws SQLException {
+    public Veicolo trovaPerTarga(String targa) {
         String sql = "SELECT * FROM Veicolo WHERE targaVeicolo = ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
@@ -67,11 +71,15 @@ public class VeicoloDAOImpl implements VeicoloDAO {
                 }
             }
         }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile trovare il veicolo.", ex);
+        }
         return null;
     }
 
     @Override
-    public void update(Veicolo veicolo) throws SQLException {
+    public void update(Veicolo veicolo)  {
 
         String sql = "UPDATE Veicolo SET marca = ?, modello = ?, tariffaDie = ?, statoVeicolo = ?" + "WHERE targaVeicolo = ? ";
 
@@ -83,22 +91,30 @@ public class VeicoloDAOImpl implements VeicoloDAO {
             statement.setString(5, veicolo.getTarga());
             statement.executeUpdate();
         }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile modificare il veicolo.", ex);
+        }
 
     }
 
     @Override
-    public void delete(String targa) throws SQLException {
+    public void delete(String targa)  {
         String sql = "DELETE FROM Veicolo WHERE targaVeicolo = ? ";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, targa);
             statement.executeUpdate();
         }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile eliminare il veicolo.", ex);
+        }
 
     }
 
     @Override
-    public List<Veicolo> cercaStato(StatoVeicolo stato) throws SQLException {
+    public List<Veicolo> cercaStato(StatoVeicolo stato) {
         String sql = "SELECT * FROM Veicolo WHERE statoVeicolo = ?";
         List <Veicolo> lista = new ArrayList<>();
 
@@ -110,6 +126,10 @@ public class VeicoloDAOImpl implements VeicoloDAO {
                 }
             }
 
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            throw new RuntimeException("Impossibile trovare il veicolo.", ex);
         }
         return lista;
 

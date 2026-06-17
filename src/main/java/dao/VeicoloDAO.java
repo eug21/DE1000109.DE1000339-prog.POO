@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface VeicoloDAO {
 
-    void save(Veicolo veicolo) throws SQLException;
-    Veicolo trovaPerTarga (String targa) throws  SQLException;
-    void update (Veicolo veicolo) throws SQLException;
-    void delete (String targa) throws SQLException;
-    List <Veicolo> cercaStato (StatoVeicolo stato) throws SQLException;
+    void save(Veicolo veicolo);
+    Veicolo trovaPerTarga (String targa);
+    void update (Veicolo veicolo);
+    void delete (String targa);
+    List <Veicolo> cercaStato (StatoVeicolo stato);
 }
