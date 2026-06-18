@@ -19,7 +19,7 @@ public class AggiungiResponsabile extends JFrame{
     private Controller controller = new Controller();
 
     public AggiungiResponsabile(){
-        setTitle("Inserisci i campi");
+        setTitle("Aggiungi un nuovo responsabile");
         setContentPane(aggiungiResponsabile);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -29,13 +29,28 @@ public class AggiungiResponsabile extends JFrame{
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String idResponsabile = testoidTextField.getText().trim();
+                String idResponsabile = testoidTextField.getText().trim().toUpperCase();
                 String nome = testoNomeTextField.getText().trim();
                 String cognome = testoCognomeTextField.getText().trim();
                 String mail = testoMailTextField.getText().trim();
 
+                if(idResponsabile.isEmpty() || nome.isEmpty() || cognome.isEmpty() || mail.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (!idResponsabile.matches("^[A-Z0-9]+$")) {
+                    JOptionPane.showMessageDialog(null, "L'ID Responsabile deve contenere solo lettere e numeri.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (!mail.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                    JOptionPane.showMessageDialog(null, "Formato email non valido.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 try{
                     controller.aggiungiResponsabile(idResponsabile,nome, cognome, mail);
+                    JOptionPane.showMessageDialog(null, "Responsabile aggiunto con successo.", "Successo", JOptionPane.INFORMATION_MESSAGE);
                     testoidTextField.setText("");
                     testoNomeTextField.setText("");
                     testoCognomeTextField.setText("");
@@ -45,8 +60,11 @@ public class AggiungiResponsabile extends JFrame{
                 catch(DatiResponsabileNonValidiException eccezione){
                     JOptionPane.showMessageDialog(null, "Dati inseriti non validi", "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch(Exception eccezione){
-                    JOptionPane.showMessageDialog(null, "Errore", "Errore", JOptionPane.ERROR_MESSAGE);
-                }
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null, "Errore durante il salvataggio", messaggioErrore, JOptionPane.ERROR_MESSAGE);                }
             }
         });
     }

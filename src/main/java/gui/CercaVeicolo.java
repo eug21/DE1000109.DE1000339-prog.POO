@@ -33,6 +33,12 @@ public class CercaVeicolo extends JFrame {
         comboStato.setVisible(false);
         aggiornaStatoButton.setVisible(false);
 
+        testoMarcaTextField.setEditable(false);
+        testoModelloTextField.setEditable(false);
+        testoTariffaTextField.setEditable(false);
+        comboStato.setEditable(false);
+
+
         comboStato.addItem(StatoVeicolo.Disponibile);
         comboStato.addItem(StatoVeicolo.Manutenzione);
         comboStato.addItem(StatoVeicolo.Noleggiato);
@@ -41,7 +47,15 @@ public class CercaVeicolo extends JFrame {
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targa = testoTargaTextField.getText().trim();
+                String targa = testoTargaTextField.getText().trim().toUpperCase();
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                    JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+
+                }
+                if(targa.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 try{
                     Veicolo veicolo =  controller.cercaTarga(targa);
@@ -57,8 +71,25 @@ public class CercaVeicolo extends JFrame {
                     comboStato.setVisible(true);
                     aggiornaStatoButton.setVisible(true);
 
+                    JOptionPane.showMessageDialog(null, "Veicolo trovato", "Successo", JOptionPane.INFORMATION_MESSAGE);
+
                 } catch (VeicoloNonTrovatoException eccezione){
-                    JOptionPane.showMessageDialog(null, "Errore", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Veicolo non trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    testoMarcaTextField.setVisible(false);
+                    testoModelloTextField.setVisible(false);
+                    testoTariffaTextField.setVisible(false);
+                    comboStato.setVisible(false);
+                    aggiornaStatoButton.setVisible(false);
+
+                }
+
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -67,7 +98,16 @@ public class CercaVeicolo extends JFrame {
         aggiornaStatoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targa = testoTargaTextField.getText().trim();
+                String targa = testoTargaTextField.getText().trim().toUpperCase();
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                    JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+
+                }
+                if(targa.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 StatoVeicolo nuovoStato = (StatoVeicolo) comboStato.getSelectedItem();
 
                 try{
@@ -75,6 +115,14 @@ public class CercaVeicolo extends JFrame {
                     JOptionPane.showMessageDialog(null, "Stato veicolo aggiornato", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 } catch (VeicoloNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Veicolo non trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
 
             }

@@ -33,7 +33,7 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
             statement.setString(2, riparazione.getDescrizioneProblema());
             statement.setFloat(3, riparazione.getCostoStimato());
             statement.setFloat(4, riparazione.getCostoFinale());
-            statement.setDate(5, java.sql.Date.valueOf(String.valueOf(riparazione.getDataRiparazione())));
+            statement.setDate(5, new java.sql.Date(riparazione.getDataRiparazione().getTime()));
 
 
             statement.executeUpdate();
@@ -45,7 +45,7 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
 
     @Override
     public boolean update(Riparazione riparazione) {
-        String sql = "UPDATE Riparazione SET costoFinale=?, descrizioneProblema=?" +
+        String sql = "UPDATE Riparazione SET costoFinale=?, descrizioneProblema=? " +
                 "WHERE targaVeicolo = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -60,14 +60,27 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
         return true;
     }
 
+    @Override
+    public void delete(String targa){
+        String sql = "DELETE FROM Riparazione WHERE targaVeicolo = ? ";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,targa);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Impossibile eliminare la riparazione");
+        }
+    }
+
 
     @Override
     public List<Riparazione> findAll() {
         List<Riparazione> lista = new ArrayList();
         String sql = "SELECT * FROM Riparazione";
 
-        try (Statement statement = connection.prepareStatement(sql);
-             ResultSet result = statement.executeQuery(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet result = statement.executeQuery()) {
             while (result.next()) {
                 lista.add(estraiRiparazione(result));
             }
@@ -76,6 +89,24 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
             throw new RuntimeException("Impossibile generare la lista delle riparazioni.", ex);
         }
         return lista;
+    }
+    @Override
+    public Riparazione cercaPerTarga (String targa){
+        String sql = "SELECT * FROM Riparazione WHERE targaVeicolo = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, targa);
+            try(ResultSet result = statement.executeQuery()){
+                if(result.next()){
+                    return estraiRiparazione(result);
+                }
+            }
+
+        }
+        catch (SQLException exception){
+            exception.printStackTrace();
+            throw new RuntimeException("Impossibile trovare la riparazione");
+        }
+        return null;
     }
 
     private Riparazione estraiRiparazione(ResultSet result) throws SQLException {

@@ -49,6 +49,8 @@ public class GestioneContratti extends JFrame{
         cercaPerFilialeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CercaPerFiliale frame = new CercaPerFiliale();
+                frame.setVisible(true);
 
             }
         });

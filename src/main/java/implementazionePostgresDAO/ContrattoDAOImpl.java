@@ -24,8 +24,8 @@ public class ContrattoDAOImpl implements ContrattoDAO {
     }
 
     @Override
-    public void save(Contratto contratto) {
-        String sql = "INSERT INTO Contratto (idFilialeRitiro, idFilialeConsegna, targaVeicolo, dataInizio, dataFine, prezzo)" + "VALUES (?, ?, ?, ?, ?, ?)";
+    public void save(Contratto contratto, String numeroPatente) {
+        String sql = "INSERT INTO Contratto (idFilialeRitiro, idFilialeConsegna, targa, dataInizio, dataFine, prezzo, numeroPatente)" + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, contratto.getIdFilialeRitiro());
             statement.setString(2, contratto.getIdFilialeConsegna());
@@ -33,11 +33,12 @@ public class ContrattoDAOImpl implements ContrattoDAO {
             statement.setDate(4, Date.valueOf(contratto.getDataInizio()));
             statement.setDate(5, Date.valueOf(contratto.getDataFine()));
             statement.setBigDecimal(6, contratto.getPrezzo());
+            statement.setString(7, numeroPatente);
             statement.executeUpdate();
         }
         catch (SQLException ex){
             ex.printStackTrace();
-            throw new RuntimeException("Impossibile salvare il cliente.", ex);
+            throw new RuntimeException("Impossibile salvare il contratto.", ex);
         }
     }
 
@@ -98,8 +99,8 @@ public class ContrattoDAOImpl implements ContrattoDAO {
         String sql = "SELECT * FROM Contratto WHERE dataInizio >= ? AND dataFine <= ?";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, String.valueOf(Date.valueOf(dataInizio)));
-            statement.setString(2, String.valueOf(Date.valueOf(dataFine)));
+            statement.setDate(1, Date.valueOf(dataInizio));
+            statement.setDate(2,Date.valueOf(dataFine));
             try(ResultSet result = statement.executeQuery()){
                 while (result.next()){
                     lista.add(estraiResulContratto(result));

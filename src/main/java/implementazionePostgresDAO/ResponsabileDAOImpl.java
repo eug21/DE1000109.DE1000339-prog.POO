@@ -23,7 +23,7 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
 
     @Override
     public void save(Responsabile responsabile) {
-        String sql ="INSERT INTO Responsabile (idResponsabile, nome, cognome, mail) VALUES (?,?,?,?)";
+        String sql ="INSERT INTO Responsabile (idResponsabile, nome, cognome, email) VALUES (?,?,?,?)";
 
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, responsabile.getIdResponsabileID());
@@ -81,8 +81,8 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
         List<Responsabile> lista = new ArrayList<>();
         String sql = "SELECT * FROM Responsabile";
 
-        try(Statement statement = connection.prepareStatement(sql)){
-            ResultSet result = statement.executeQuery(sql);
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            ResultSet result = statement.executeQuery();
             while (result.next()){
                 lista.add(estraiResponsabile(result));
             }
@@ -96,7 +96,7 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
 
     @Override
     public boolean update(Responsabile responsabile){
-        String sql = "UPDATE Responsabile SET nome= ?, cognome=?, mail = ? WHERE idResponsabile = ?";
+        String sql = "UPDATE Responsabile SET nome= ?, cognome=?, email = ? WHERE idResponsabile = ?";
 
    try (PreparedStatement statement = connection.prepareStatement(sql)){
        statement.setString(1, responsabile.getNome());
@@ -148,7 +148,7 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
                 result.getString("idResponsabile"),
                 result.getString("nome"),
                 result.getString("cognome"),
-                result.getString("mail")
+                result.getString("email")
         );
 
     }

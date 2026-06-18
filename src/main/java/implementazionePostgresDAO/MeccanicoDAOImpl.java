@@ -60,6 +60,7 @@ public class MeccanicoDAOImpl implements MeccanicoDAO{
             throw new RuntimeException("Impossibile trovare il meccanico.", ex);
         }
         return null;
+
     }
 
     @Override
@@ -83,8 +84,8 @@ public class MeccanicoDAOImpl implements MeccanicoDAO{
         List<Meccanico> lista = new ArrayList<>();
         String sql = "SELECT * FROM Meccanico";
 
-        try(Statement statement = connection.prepareStatement(sql);
-            ResultSet result = statement.executeQuery(sql)){
+        try(PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet result = statement.executeQuery()){
             while (result.next()){
                 lista.add(estraiMeccanico(result));
             }

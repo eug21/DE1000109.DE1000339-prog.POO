@@ -3,11 +3,14 @@ package gui;
 import controller.Controller;
 import exception.VeicoloNonDisponibileException;
 import exception.VeicoloNonTrovatoException;
+import model.Veicolo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListaVeicolo extends JFrame {
     private JPanel listaVeicolo;
@@ -26,37 +29,48 @@ public class ListaVeicolo extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        Object[][] righe = {};
         String[] colonne = {"Targa", "Marca", "Modello", "Tariffa", "Stato"};
 
         tuttiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tabellaVeicoli.setModel(new DefaultTableModel(righe, colonne));
+                List < Veicolo> tuttiVeicoli = new ArrayList<>();
+                List <Veicolo> disponibili = controller.getVeicoliDisponibili();
+                if(disponibili != null){
+                    tuttiVeicoli.addAll(disponibili);
+                }
+                List <Veicolo> noleggiati = controller.getVeicoliNoleggiati();
+                if(noleggiati != null) {
+                    tuttiVeicoli.addAll(noleggiati);
+                }
+                List <Veicolo> manutenzione = controller.getVeicoliManutenzione();
+                if(manutenzione != null){
+                    tuttiVeicoli.addAll(manutenzione);
+                }
+                riempiTabella(tuttiVeicoli, colonne);
+
+
             }
         });
         disponibiliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // da fare controller.getVeicoliNoleggiati();
-                Object[][] righe = {};
-                tabellaVeicoli.setModel(new DefaultTableModel(righe, colonne));
+                List <Veicolo> lista = controller.getVeicoliDisponibili();
+                riempiTabella(lista, colonne);
             }
         });
         manutenzioneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // da farae controller.getVeicoliManutenzione();
-                Object[][] righe  = {};
-                tabellaVeicoli.setModel(new DefaultTableModel(righe, colonne));
+                List <Veicolo> lista = controller.getVeicoliManutenzione();
+                riempiTabella(lista, colonne);
             }
         });
         noleggiatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // da fare controller.getVeicoliNoleggiati();
-                Object[][] righe = {};
-                tabellaVeicoli.setModel(new DefaultTableModel(righe, colonne));
+                List <Veicolo> lista = controller.getVeicoliNoleggiati();
+                riempiTabella(lista, colonne);
             }
         });
         eliminaSelezionatoButton.addActionListener(new ActionListener() {
@@ -84,7 +98,31 @@ public class ListaVeicolo extends JFrame {
                 } catch (VeicoloNonDisponibileException eccezione){
                     JOptionPane.showMessageDialog(null, "Veicolo non disponobile", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
+        tuttiButton.doClick();
+    }
+    private void riempiTabella (List <Veicolo> lista, String [] colonne){
+        DefaultTableModel modello = new DefaultTableModel(null, colonne);
+        if(lista != null){
+            for (Veicolo v : lista){
+                modello.addRow(new Object[] {
+                        v.getTarga(),
+                        v.getMarca(),
+                        v.getModello(),
+                        v.getTariffaDie(),
+                        v.getStatoVeicolo().toString()
+                });
+            }
+        }
+        tabellaVeicoli.setModel(modello);
     }
 }

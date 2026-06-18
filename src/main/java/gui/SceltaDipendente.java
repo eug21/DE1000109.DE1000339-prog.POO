@@ -16,7 +16,7 @@ public class SceltaDipendente extends JFrame{
 
     public SceltaDipendente() {
 
-        setTitle("Scegli un dipendente");
+        setTitle("Seleziona un dipendente");
         setContentPane(sceltaDipendente);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();

@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class CercaPerDate extends JFrame{
     private JPanel cercaPerDate;
@@ -21,6 +22,8 @@ public class CercaPerDate extends JFrame{
     private JTextField fineTextField;
 
     private Controller controller = new Controller();
+    private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
     public CercaPerDate(){
         setTitle("Cerca contratti per date");
@@ -32,7 +35,7 @@ public class CercaPerDate extends JFrame{
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String [] colonne = { controller.contrattiPerPeriodo(LocalDate.parse(inizioTextField.getText().trim()), LocalDate.parse(fineTextField.getText().trim())).toString() + "Filiale Consegna"  + "Data Fine" + "Prezzo"};
+                String [] colonne = { controller.contrattiPerPeriodo(LocalDate.parse(inizioTextField.getText().trim(), formatoDataItalia), LocalDate.parse(fineTextField.getText().trim(), formatoDataItalia)) + "Filiale Consegna"  + "Data Fine" + "Prezzo"};
                 Object[][] righe = {};
 
                 tabContratti.setModel(new DefaultTableModel(righe, colonne));

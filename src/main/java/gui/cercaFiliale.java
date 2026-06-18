@@ -37,7 +37,16 @@ public class cercaFiliale extends JFrame{
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String codice = testoCodiceTextField.getText().trim();
+                String codice = testoCodiceTextField.getText().trim().toUpperCase();
+                if (!codice.matches("^[A-Z0-9]+$")) {
+                    JOptionPane.showMessageDialog(null, "Il codice filiale deve contenere solo lettere e numeri.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(codice.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 try{
                     Filiale filiale = controller.cercaConIdFiliale(codice);
                     testoCAPTextField.setText(filiale.getCap());
@@ -52,6 +61,13 @@ public class cercaFiliale extends JFrame{
                     salvaModificheButton.setVisible(true);
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, eccezione.getMessage(), "La filiale non esiste", JOptionPane.ERROR_MESSAGE);
+                }catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
 
 
@@ -60,11 +76,24 @@ public class cercaFiliale extends JFrame{
         salvaModificheButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String codice = testoCodiceTextField.getText().trim();
+                String codice = testoCodiceTextField.getText().trim().toUpperCase();
                 String via = testoViaTextField.getText().trim();
                 String citta = testoCittaTextField.getText().trim();
                 String cap = testoCAPTextField.getText().trim();
+                if(!cap.matches("^[0-9]{5}$")){
+                    JOptionPane.showMessageDialog(null, "Il CAP deve contenere 5 numeri", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 String telefono = testoTelefonoTextField.getText().trim();
+                if(telefono.matches("^[0-9]{9,11}$")){
+                    JOptionPane.showMessageDialog(null, "Numero telefono non valido", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(codice.isEmpty() || via.isEmpty() || citta.isEmpty() || cap.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 try{
                     controller.modificaDatiFiliale(codice, via, cap, citta, telefono, codice);
@@ -73,6 +102,14 @@ public class cercaFiliale extends JFrame{
                     JOptionPane.showMessageDialog(null, "I dati inseriti non sono validi", "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, "Filiale non trovata", "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

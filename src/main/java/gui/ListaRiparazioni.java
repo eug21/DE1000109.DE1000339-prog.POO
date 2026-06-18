@@ -30,15 +30,15 @@ public class ListaRiparazioni extends JFrame {
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String [] colonne = {"Problema", "Costo stimato", "Costo finale", "Targa", "Data riparazione"};
+                String [] colonne = {"Problema", "Costo stimato", "Targa", "Costo Finale", "Data riparazione"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
                 List<Riparazione> lista = controller.getTutteRiparazioni();
                 if(lista != null){
                     for (Riparazione r: lista){
                         modello.addRow(new Object[]{ r.getDescrizioneProblema(),
                                 r.getCostoStimato(),
-                                r.getCostoFinale(),
                                 r.getTargaVeicolo(),
+                                r.getCostoFinale(),
                                 r.getDataRiparazione()});
                     }
                 }
@@ -54,8 +54,8 @@ public class ListaRiparazioni extends JFrame {
                     return;
                 }
 
-                String targa  = (String) table1.getValueAt(riga, 4);
-                Float prezzo = (Float)  table1.getValueAt(riga, 3);
+                String targa  = (String) table1.getValueAt(riga, 3);
+                Float prezzo = (Float)  table1.getValueAt(riga, 4);
                 int conferma  = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere questa riparazione su questo veicolo: " + targa + "?", "Eliminazione", JOptionPane.YES_NO_OPTION);
 
                 if(conferma != JOptionPane.YES_OPTION){
@@ -67,8 +67,16 @@ public class ListaRiparazioni extends JFrame {
                     aggiornaListaButton.doClick();
                 } catch (RiparazioneNonTrovateException eccezione){
                     JOptionPane.showMessageDialog(null, "La riparazione non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+        aggiornaListaButton.doClick();
     }
 }

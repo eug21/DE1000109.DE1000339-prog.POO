@@ -141,15 +141,15 @@ public class Controller {
         return true;
     }
 
-    public List<Veicolo> getVeicoliDisponibili() throws Exception {
+    public List<Veicolo> getVeicoliDisponibili() {
         return veicoloDAO.cercaStato(StatoVeicolo.Disponibile);
     }
 
-    public List<Veicolo> getVeicoliManutenzione() throws Exception {
+    public List<Veicolo> getVeicoliManutenzione() {
         return veicoloDAO.cercaStato(StatoVeicolo.Manutenzione);
     }
 
-    public List<Veicolo> getVeicoliNoleggiati() throws Exception {
+    public List<Veicolo> getVeicoliNoleggiati() {
         return veicoloDAO.cercaStato(StatoVeicolo.Noleggiato);
     }
 
@@ -230,7 +230,7 @@ public class Controller {
         BigDecimal prezzoFinale = veicolo.getTariffaDie().multiply(BigDecimal.valueOf(contratto.getDurataNoleggio()));
         contratto.setPrezzo(prezzoFinale);
         veicolo.setStatoVeicolo(StatoVeicolo.Noleggiato);
-        contrattoDAO.save(contratto);
+        contrattoDAO.save(contratto, cliente.getNumeroPatente());
         veicoloDAO.update(veicolo);
         return contratto;
     }
@@ -374,7 +374,8 @@ public class Controller {
         if(idMeccanico.isBlank()||idMeccanico == null){
             throw new MeccanicoNonTrovatoException("Il meccanico non esiste");
         }
-       return meccanicoDAO.trovaPerID(idMeccanico);
+        return meccanicoDAO.trovaPerID(idMeccanico);
+
 
     }
 
@@ -418,7 +419,7 @@ public class Controller {
             veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
             veicoloDAO.update(veicolo);
         }
-      riparazioneDAO.update(riparazione);
+      riparazioneDAO.delete(targaVeicolo);
         return true;
     }
 
@@ -441,7 +442,7 @@ public class Controller {
         if (targaVeicolo == null || targaVeicolo.isBlank()) {
             throw new DatiRiparazioneNonValidiException("La targa non è valida.");
         }
-        Riparazione riparazione = cercaRiparazionePerTarga(targaVeicolo);
+        Riparazione riparazione = riparazioneDAO.cercaPerTarga(targaVeicolo);
 
         if (riparazione == null) {
             throw new RiparazioneNonTrovateException("Riparazione non trovata");

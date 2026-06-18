@@ -21,7 +21,7 @@ public class ListaMeccanici extends JFrame{
     private Controller controller = new Controller();
 
     public ListaMeccanici(){
-        setTitle("Ecco i meccanici");
+        setTitle("Lista meccanici");
         setContentPane(lista);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -62,12 +62,20 @@ public class ListaMeccanici extends JFrame{
                 }
                 try {
                     controller.eliminaMeccanico(idMec);
-                    JOptionPane.showMessageDialog(null, "Filiale eliminata con successo! ");
+                    JOptionPane.showMessageDialog(null, "Meccanico eliminato con successo! ");
                     aggiornaListaButton.doClick();
                 } catch (MeccanicoNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il meccanico non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+        aggiornaListaButton.doClick();
     }
 }

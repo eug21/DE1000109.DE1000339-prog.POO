@@ -77,7 +77,7 @@ public class FilialeDAOImpl implements FilialeDAO {
 
     @Override
     public void update(Filiale filiale) {
-        String sql = "UPDATE Filiale SET via = ? , citta = ? , cap = ?, numeroTelefono = ?" + "WHERE codiceFiliale  = ? ";
+        String sql = "UPDATE Filiale SET via = ? , citta = ? , cap = ?, numeroTelefono = ? " + "WHERE codiceFiliale  = ? ";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, filiale.getVia());
             statement.setString(2, filiale.getCitta());

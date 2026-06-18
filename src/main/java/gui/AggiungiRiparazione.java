@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class AggiungiRiparazione extends JFrame {
@@ -23,6 +25,7 @@ public class AggiungiRiparazione extends JFrame {
     private JButton aggiungiButton;
 
     private Controller controller = new Controller();
+    private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public AggiungiRiparazione(){
         setTitle("Aggiungi una riparazione");
@@ -35,27 +38,41 @@ public class AggiungiRiparazione extends JFrame {
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targa = targaTextField.getText().trim();
+                String targa = targaTextField.getText().trim().toUpperCase();
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                    JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 String problema = problemaTextField.getText().trim();
                 Float prezzo = Float.valueOf(prezzpTextField.getText().trim());
-                String dataTesto = dataTextField.getText().trim();
-                SimpleDateFormat formatter = new SimpleDateFormat();
-                Date data = null;
-                try {
-                    data = formatter.parse(dataTesto);
-                } catch (ParseException ex) {
-                    throw new RuntimeException(ex);
+                Float stima = Float.valueOf(stimaTextField.getText().trim());
+                LocalDate data = LocalDate.parse(dataTextField.getText().trim(), formatoDataItalia);
+                ZoneId defaultZ  = ZoneId.systemDefault();
+                Date dataParametro = Date.from(data.atStartOfDay(defaultZ).toInstant());
+
+                if(targa.isEmpty()|| problema.isEmpty() || stima == null ||prezzo == null || data == null){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
                 try {
-                    Riparazione riparazione  = controller.aggiungiRiparazione(problema, prezzo, data, prezzo, targa);
+                    controller.aggiungiRiparazione(problema, stima,dataParametro , prezzo, targa);
                     JOptionPane.showMessageDialog(null, "Riparazione aggiunta con successo", "Successo", JOptionPane.INFORMATION_MESSAGE);
                     targaTextField.setText("");
                     problemaTextField.setText("");
                     prezzpTextField.setText("");
                     dataTextField.setText("");
+                    stimaTextField.setText("");
 
                 } catch (DatiRiparazioneNonValidiException eccezione){
                     JOptionPane.showMessageDialog(null, "Dati non validi", "Errore", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                    eccezione.printStackTrace();
                 }
             }
         });

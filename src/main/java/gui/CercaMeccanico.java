@@ -24,19 +24,47 @@ public class CercaMeccanico  extends JFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+
+        nomeTextField.setEditable(false);
+        cognomeTextField.setEditable(false);
+        nomeTextField.setVisible(false);
+        cognomeTextField.setVisible(false);
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               String idMec =  idTextField.getText().trim();
+               String idMec =  idTextField.getText().trim().toUpperCase();
+                if(idMec.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (!idMec.matches("^[A-Z0-9]+$")) {
+                    JOptionPane.showMessageDialog(null, "L'ID Meccanico deve contenere solo lettere e numeri.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                try{
                    Meccanico meccanico = controller.cercaMeccanico(idMec);
+                   nomeTextField.setVisible(true);
+                   cognomeTextField.setVisible(true);
                    nomeTextField.setText(meccanico.getNome());
                    cognomeTextField.setText(meccanico.getCognome());
+                   JOptionPane.showMessageDialog(null ,"Meccanico trovato con successo", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
                } catch (MeccanicoNonTrovatoException eccezione){
                    JOptionPane.showMessageDialog(null, "Il meccanico non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
-                }
+                   nomeTextField.setVisible(false);
+                   cognomeTextField.setVisible(false);
+                } catch (Exception ex) {
+                   //trigger sql
+                   String messaggioErrore = ex.getMessage();
+                   if(ex.getCause() != null){
+                       messaggioErrore = ex.getCause().getMessage();
+                   }
+                   JOptionPane.showMessageDialog(null, "Errore durante il salvataggio", messaggioErrore, JOptionPane.ERROR_MESSAGE);
+                   nomeTextField.setVisible(false);
+                   cognomeTextField.setVisible(false);
+               }
 
 
             }
@@ -46,11 +74,22 @@ public class CercaMeccanico  extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 Meccanico meccanico = null;
+                String idMec =  idTextField.getText().trim().toUpperCase();
+                if(idMec.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (!idMec.matches("^[A-Z0-9]+$")) {
+                    JOptionPane.showMessageDialog(null, "L'ID Meccanico deve contenere solo lettere e numeri.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 try{
-                    meccanico = controller.cercaMeccanico(idTextField.getText().trim());
+                   meccanico = controller.cercaMeccanico(idMec);
 
                 } catch(MeccanicoNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il meccanico non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    return;
 
                 }
                 Boolean stato = meccanico.isDisponibile();
@@ -65,6 +104,13 @@ public class CercaMeccanico  extends JFrame{
                 }catch (MeccanicoNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il meccanico non e' disponibile", "Errore", JOptionPane.INFORMATION_MESSAGE);
 
+                }catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
 
             }

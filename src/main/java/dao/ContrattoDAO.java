@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ContrattoDAO {
-    void save (Contratto contratto);
+    void save (Contratto contratto, String numeroPatente);
     void chiudi (Contratto contratto);
     List <Contratto> trovaPerCliente (String numeroPatente);
     List <Contratto> trovaPerFiliale (String codiceFiliale);

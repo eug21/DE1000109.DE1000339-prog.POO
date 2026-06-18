@@ -55,10 +55,20 @@ public class AggiuntaVeicolo extends JFrame {
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targa = targaTesto.getText().trim();
+                String targa = targaTesto.getText().trim().toUpperCase();
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                    JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 String marca = marcaTesto.getText().trim();
                 String modello = modelloTesto.getText().trim();
                 String tipo = (String) tipoCombo.getSelectedItem();
+
+                if(targa.isEmpty() || marca.isEmpty() || modello.isEmpty() || tipo.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+
+                }
 
                 try {
                     BigDecimal tariffa = new BigDecimal(tariffaTesto.getText().trim());
@@ -93,7 +103,12 @@ public class AggiuntaVeicolo extends JFrame {
                     JOptionPane.showMessageDialog(null, "Campo numerico non valido", "Errore", JOptionPane.ERROR_MESSAGE);
 
                 } catch (Exception eccezione){
-                    JOptionPane.showMessageDialog(null, "Errore", "Errore", JOptionPane.ERROR_MESSAGE);
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

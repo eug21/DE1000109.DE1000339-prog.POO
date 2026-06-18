@@ -65,11 +65,17 @@ public class ListaFiliali extends  JFrame{
                     aggiornaListaButton.doClick();
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore la filiale non esiste", JOptionPane.ERROR_MESSAGE);
-                } catch(Exception eccezione){
-                    JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }  catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
         });
+        aggiornaListaButton.doClick();
     }
 }

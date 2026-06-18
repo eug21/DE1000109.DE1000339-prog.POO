@@ -8,4 +8,6 @@ public interface RiparazioneDAO {
     void save(Riparazione riparazione);
     boolean update(Riparazione riparazione);
     List<Riparazione> findAll();
+    Riparazione cercaPerTarga(String targa);
+    void delete(String targa);
 }

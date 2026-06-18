@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class AggiungiContratto extends JFrame {
@@ -36,6 +38,7 @@ public class AggiungiContratto extends JFrame {
 
     private Cliente clienteTrovato = null;
     private Veicolo veicoloTrovato = null;
+    private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public AggiungiContratto() {
         setTitle("Aggiungi Contratto");
@@ -55,13 +58,25 @@ public class AggiungiContratto extends JFrame {
         cercaClienteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String patente = (String) testoPatenteTextField.getText().trim();
+                String patente = testoPatenteTextField.getText().trim().toUpperCase();
+                if(!patente.matches("^[A-Z0-9]{9,10}$")){
+                    JOptionPane.showMessageDialog(null, "Formato patente non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if(patente.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                     try {
                         clienteTrovato = controller.ricercaPerPatente(patente);
+                        cliente.setText(clienteTrovato.getNome() + " " + clienteTrovato.getCognome());
+
                     } catch (ClienteNonTrovatoException ex) {
                         JOptionPane.showMessageDialog(null,"Cliente non trovato.", ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+                        clienteTrovato = null;
+                        cliente.setText("Nessun cliente selezionato,");
                     }
-                    cliente.setText(clienteTrovato.getNome() + " " + clienteTrovato.getCognome());
 
 
             }
@@ -69,28 +84,43 @@ public class AggiungiContratto extends JFrame {
         cercaVeicoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String targa = (String) testoTargaTextField.getText().trim();
+                String targa = testoTargaTextField.getText().trim().toUpperCase();
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                    JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+
+                }
+                if(targa.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 try{
                     veicoloTrovato = controller.cercaTarga(targa);
+
                     if(!veicoloTrovato.verificaDisponibile()){
                         JOptionPane.showMessageDialog(null, "Il veicolo trovato non e' disponibile", "Errore", JOptionPane.ERROR_MESSAGE);
                         veicoloTrovato = null;
                         return;
                     }
                     veicolo.setText(veicoloTrovato.getMarca() + " " + veicoloTrovato.getModello());
+
                 } catch (VeicoloNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il veicolo non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                     veicoloTrovato = null;
+                    veicolo.setText("Nessun veicolo selezionato.");
                 }
             }
         });
         calcolaPrezzoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(veicoloTrovato == null){
+                    JOptionPane.showMessageDialog(null,"Seleziona un veicolo", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 try{
-                    LocalDate dataInizio = LocalDate.parse(inizioTextField.getText().trim());
-                    LocalDate dataFine = LocalDate.parse(fineTextField.getText().trim());
+                    LocalDate dataInizio = LocalDate.parse(inizioTextField.getText().trim(), formatoDataItalia);
+                    LocalDate dataFine = LocalDate.parse(fineTextField.getText().trim(), formatoDataItalia);
                     BigDecimal prezzo = controller.calcolaCostoNoleggio(veicoloTrovato, dataInizio, dataFine);
 
                     stima.setText("Prezzo stimato: € " + prezzo.toString());
@@ -106,16 +136,29 @@ public class AggiungiContratto extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    if(clienteTrovato == null || veicoloTrovato == null){
+                        JOptionPane.showMessageDialog(null, "Cerca un cliente e un veicolo", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                     String filialeRitiro = ritiroTextField.getText().trim();
                     String filialeConsegna = consegnaTextField.getText().trim();
-                    LocalDate inizio = LocalDate.parse(inizioTextField.getText().trim());
-                    LocalDate fine = LocalDate.parse(fineTextField.getText().trim());
+                    LocalDate inizio = LocalDate.parse(inizioTextField.getText().trim(), formatoDataItalia);
+                    LocalDate fine = LocalDate.parse(fineTextField.getText().trim(), formatoDataItalia);
 
                     controller.aggiungiContratto(filialeRitiro, filialeConsegna, inizio, fine, BigDecimal.ZERO, clienteTrovato, veicoloTrovato);
                     JOptionPane.showMessageDialog(null, "Contratto creato con successo", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
+                    inizioTextField.setText("");
+                    fineTextField.setText("");
+                    confermaButton.setVisible(false);
+
                 } catch (Exception eccezione){
-                    JOptionPane.showMessageDialog(null, "Errore", "Errore", JOptionPane.ERROR_MESSAGE);
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
