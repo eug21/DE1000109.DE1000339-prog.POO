@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import controller.Controller;
 import exception.ClienteNonTrovatoException;
-import exception.DatiClienteNonValidi;
 import model.Cliente;
 
 import java.awt.event.ActionEvent;
@@ -17,6 +16,7 @@ public class CercaCliente extends  JFrame{
     private JTextField fiscaleTesto;
     private JTextField tipoTesto;
     private JButton cerca;
+    private JButton rinnovoPatenteButton;
 
     private Controller controller = new Controller();
     public CercaCliente(){
@@ -30,6 +30,7 @@ public class CercaCliente extends  JFrame{
         cognomeTesto.setVisible(false);
         fiscaleTesto.setVisible(false);
         tipoTesto.setVisible(false);
+        rinnovoPatenteButton.setEnabled(false);
         cerca.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,6 +66,7 @@ public class CercaCliente extends  JFrame{
                     cognomeTesto.setVisible(true);
                     fiscaleTesto.setVisible(true);
                     tipoTesto.setVisible(true);
+                    rinnovoPatenteButton.setEnabled(true);
 
                 } catch(ClienteNonTrovatoException eccezione) {
                     JOptionPane.showMessageDialog(null, "Il cliente non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -90,6 +92,14 @@ public class CercaCliente extends  JFrame{
                     tipoTesto.setVisible(false);
 
                 }
+            }
+        });
+        rinnovoPatenteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String patenteVecchia = numeroPatenteTesto.getText().trim().toUpperCase();
+                rinnovoPatente frame = new rinnovoPatente(patenteVecchia);
+                frame.setVisible(true);
             }
         });
     }

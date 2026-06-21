@@ -66,6 +66,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             statement.setString(1, numeroPatente);
             statement.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("Impossibile eliminare il cliente",e);
         }
 
@@ -83,9 +84,24 @@ public class ClienteDAOImpl implements ClienteDAO {
                 lista.add(estraiResultCliente(result)   );
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("Errore nel caricamento dei clienti.", e);
         }
         return lista;
+    }
+
+    @Override
+    public boolean rinnovoPatente(String patenteVecchia, String patenteNuova) {
+        String sql = "UPDATE Cliente SET numeroPatente = ? WHERE numeroPatente = ? ";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, patenteNuova);
+            statement.setString(2, patenteVecchia);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore nel rinnovo patente.", e);
+        }
     }
 
     private Cliente estraiResultCliente(ResultSet result)throws SQLException{

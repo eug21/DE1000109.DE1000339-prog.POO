@@ -143,6 +143,21 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
         return true;
     }
 
+    @Override
+    public boolean modificaEmail(String idResponsabile, String email){
+        String sql = "UPDATE Responsabile SET email = ? WHERE idResponsabile = ? ";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(2, idResponsabile);
+            statement.setString(1, email);
+            statement.executeUpdate();
+            return true;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException("Impossibile modificare i dati.");
+        }
+    }
+
     private Responsabile estraiResponsabile(ResultSet result) throws SQLException{
         return new Responsabile(
                 result.getString("idResponsabile"),

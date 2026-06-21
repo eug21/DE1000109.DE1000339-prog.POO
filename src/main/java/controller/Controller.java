@@ -55,11 +55,11 @@ public class Controller {
 
 
     //registrazione cliente
-    public Cliente registraCliente(String nome, String cognome, String cf, TipoPatente tipo, String numPatente) throws Exception {
+    public Cliente registraCliente(String nome, String cognome, String cf, TipoPatente tipo, String numPatente) throws DatiClienteNonValidi {
         Cliente cliente = new Cliente(nome, cognome, cf, tipo, numPatente);
 
         if (!cliente.verificaRegistrazione()) {
-            throw new Exception("Dati cliente non validi.");
+            throw new DatiClienteNonValidi("Dati cliente non validi.");
 
         }
         clienteDAO.save(cliente);
@@ -94,6 +94,17 @@ public class Controller {
     //trova tutti i clienti
     public List<Cliente> getTuttiClienti(){
         return clienteDAO.findAll();
+    }
+
+    //cambio numero patente in caso di rinnnovo
+    public void cambioPatente (String patenteVecchia, String patenteNuova) throws DatiClienteNonValidi, ClienteNonTrovatoException{
+        if(patenteVecchia.isEmpty() || patenteVecchia == null || patenteNuova.isEmpty() || patenteNuova == null){
+            throw new DatiClienteNonValidi("Dati inseriti non validi");
+        }
+        boolean check = clienteDAO.rinnovoPatente(patenteVecchia, patenteNuova);
+        if(!check){
+            throw new ClienteNonTrovatoException("Il cliente non esiste");
+        }
     }
 
 
@@ -152,6 +163,8 @@ public class Controller {
     public List<Veicolo> getVeicoliNoleggiati() {
         return veicoloDAO.cercaStato(StatoVeicolo.Noleggiato);
     }
+
+
 
     //seguono i metodi della classe filiale
 
@@ -356,6 +369,17 @@ public class Controller {
        responsabileDAO.rimuoviDaFiliale(idResponsabile);
        responsabileDAO.update(responsabile);
         return true;
+    }
+
+    //modifica email di un responsabile
+    public void modificaEmail (String idResponsabile, String email) throws ResponsabileNonTrovatoException{
+        if(!email.contains("@")){
+            throw new IllegalArgumentException("Formato mail non valido.");
+        }
+        boolean successo = responsabileDAO.modificaEmail(idResponsabile, email);
+        if(!successo){
+            throw new ResponsabileNonTrovatoException("Il responsabile non esiste.");
+        }
     }
 
     //metodi  per meccanico

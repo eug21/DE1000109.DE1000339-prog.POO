@@ -1,0 +1,69 @@
+package gui;
+
+import controller.Controller;
+import exception.ClienteNonTrovatoException;
+import exception.DatiClienteNonValidi;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class rinnovoPatente extends JFrame {
+    private JPanel rinnovoPatente;
+    private JTextField patenteAttualeTextField;
+    private JTextField nuovaPatenteTextField;
+    private JButton confermaButton;
+    private JButton annullaButton;
+
+    private Controller controller = new Controller();
+
+
+
+    public rinnovoPatente(String vecchiaPatente){
+        setTitle("PROCEDURA RINNOVO PATENTE");
+        setContentPane(rinnovoPatente);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+
+
+        patenteAttualeTextField.setText(vecchiaPatente);
+
+        confermaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nuovaPatente = nuovaPatenteTextField.getText().trim().toUpperCase();
+                if(!nuovaPatente.matches("^[A-Z0-9]{9,10}$")){
+                    JOptionPane.showMessageDialog(null, "Formato patente non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
+                    dispose();
+                }
+                if(nuovaPatente.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    dispose();
+                }
+                try{
+                    controller.cambioPatente(vecchiaPatente, nuovaPatente);
+                    JOptionPane.showMessageDialog(null, "Patente rinnovata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } catch (DatiClienteNonValidi | ClienteNonTrovatoException exception){
+                    JOptionPane.showMessageDialog(null, "Impossibile rinnovare la patente.", "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+        annullaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+
+            }
+        });
+    }
+}
