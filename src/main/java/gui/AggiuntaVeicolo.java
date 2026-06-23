@@ -56,7 +56,7 @@ public class AggiuntaVeicolo extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String targa = targaTesto.getText().trim().toUpperCase();
-                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$")){
+                if(!targa.matches("^[A-Z]{2}[0-9]{3}[A-Z]{2}$") || !targa.matches("[A-Z]{2}[0-9]{5}$")){
                     JOptionPane.showMessageDialog(null, "Formato targa non valido, rispettare quello Europeo.","Attenzione", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
@@ -72,23 +72,19 @@ public class AggiuntaVeicolo extends JFrame {
 
                 try {
                     BigDecimal tariffa = new BigDecimal(tariffaTesto.getText().trim());
+                    String aggiunta = "";
                     switch(tipo){
                         case "Auto":
-                            int numeroPorte = Integer.parseInt(porteTesto.getText().trim());
-                            Auto auto = new Auto(targa, modello , marca, tariffa, StatoVeicolo.Disponibile, numeroPorte);
-                            controller.aggiungiVeicolo(auto);
+                            aggiunta = porteTesto.getText().trim();
                             break;
                         case "Moto":
-                            int cilindrata = Integer.parseInt(cilindrataTesto.getText().trim());
-                            Moto moto = new Moto(targa, modello, marca, tariffa, StatoVeicolo.Disponibile, cilindrata);
-                            controller.aggiungiVeicolo(moto);
+                            aggiunta = cilindrataTesto.getText().trim();
                             break;
                         case "Furgone":
-                            float carico = Float.parseFloat(capacitaTesto.getText().trim());
-                            Furgone furgone = new Furgone(targa, modello, marca, tariffa, StatoVeicolo.Disponibile, carico);
-                            controller.aggiungiVeicolo(furgone);
+                            aggiunta = capacitaTesto.getText().trim();
                             break;
                     }
+                    controller.aggiungiVeicolo(tipo, targa, marca, modello, tariffa, aggiunta);
 
                     JOptionPane.showMessageDialog(null, "Veicolo aggiuinto con successo","Successo", JOptionPane.INFORMATION_MESSAGE);
 
