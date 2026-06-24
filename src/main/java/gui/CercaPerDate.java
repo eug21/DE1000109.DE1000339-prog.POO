@@ -21,11 +21,12 @@ public class CercaPerDate extends JFrame{
     private JTextField inizioTextField;
     private JTextField fineTextField;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
     private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
-    public CercaPerDate(){
+    public CercaPerDate(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca contratti per date");
         setContentPane(cercaPerDate);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

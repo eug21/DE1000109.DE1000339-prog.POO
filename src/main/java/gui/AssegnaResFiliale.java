@@ -15,8 +15,9 @@ public class AssegnaResFiliale  extends JFrame {
     private JPanel assegna;
 
 
-    private Controller controller = new Controller();
-    public AssegnaResFiliale(){
+    private Controller controller; 
+    public AssegnaResFiliale(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Assegna un responsabile a una filiale");
         setContentPane(assegna);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

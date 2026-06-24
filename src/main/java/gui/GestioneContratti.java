@@ -13,9 +13,10 @@ public class GestioneContratti extends JFrame{
     private JButton cercaPerClienteButton;
     private JButton cercaPerFilialeButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public GestioneContratti(){
+    public GestioneContratti(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Gestione Contratti");
         setContentPane(gestioneContratti);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -25,7 +26,7 @@ public class GestioneContratti extends JFrame{
         nuovoContrattoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AggiungiContratto frame = new AggiungiContratto();
+                AggiungiContratto frame = new AggiungiContratto(controller);
                 frame.setVisible(true);
 
             }
@@ -33,7 +34,7 @@ public class GestioneContratti extends JFrame{
         cercaDate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaPerDate frame = new CercaPerDate();
+                CercaPerDate frame = new CercaPerDate(controller);
                 frame.setVisible(true);
 
             }
@@ -41,7 +42,7 @@ public class GestioneContratti extends JFrame{
         cercaPerClienteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaPerCliente frame = new CercaPerCliente();
+                CercaPerCliente frame = new CercaPerCliente(controller);
                 frame.setVisible(true);
 
             }
@@ -49,7 +50,7 @@ public class GestioneContratti extends JFrame{
         cercaPerFilialeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaPerFiliale frame = new CercaPerFiliale();
+                CercaPerFiliale frame = new CercaPerFiliale(controller);
                 frame.setVisible(true);
 
             }

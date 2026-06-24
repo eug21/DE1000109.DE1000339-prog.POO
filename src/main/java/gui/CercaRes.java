@@ -17,9 +17,10 @@ public class CercaRes extends JFrame {
     private JButton cercaButton;
     private JButton modificaEmailButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public CercaRes(){
+    public CercaRes(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca un responsabile");
         setContentPane(cercaRes);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

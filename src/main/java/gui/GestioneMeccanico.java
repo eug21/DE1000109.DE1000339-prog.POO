@@ -12,9 +12,10 @@ public class GestioneMeccanico extends JFrame{
     private JButton cercaButton;
     private JButton listaButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public GestioneMeccanico(){
+    public GestioneMeccanico(Controller controllerHome){
+        this.controller = controllerHome;
 
         setTitle("Scegli un'opzione");
         setContentPane(gestioneMeccanico);
@@ -24,21 +25,21 @@ public class GestioneMeccanico extends JFrame{
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AggiungiMeccanico frame = new AggiungiMeccanico();
+                AggiungiMeccanico frame = new AggiungiMeccanico(controller);
                 frame.setVisible(true);
             }
         });
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaMeccanico frame = new CercaMeccanico();
+                CercaMeccanico frame = new CercaMeccanico(controller);
                 frame.setVisible(true);
             }
         });
         listaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ListaMeccanici frame = new ListaMeccanici();
+                ListaMeccanici frame = new ListaMeccanici(controller);
                 frame.setVisible(true);
             }
         });

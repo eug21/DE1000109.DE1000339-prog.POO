@@ -23,9 +23,10 @@ public class AggiuntaVeicolo extends JFrame {
     private JButton aggiungiButton;
     private JComboBox tipoCombo;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public AggiuntaVeicolo(){
+    public AggiuntaVeicolo(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Aggiungi Veicolo");
         setContentPane(aggiuntaVeicolo);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -21,9 +21,10 @@ public class ListaVeicolo extends JFrame {
     private JTable tabellaVeicoli;
     private JButton eliminaSelezionatoButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public ListaVeicolo(){
+    public ListaVeicolo(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Lista veicoli");
         setContentPane(listaVeicolo);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -35,15 +36,15 @@ public class ListaVeicolo extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List < Veicolo> tuttiVeicoli = new ArrayList<>();
-                List <Veicolo> disponibili = controller.getVeicoliDisponibili();
+                List <Veicolo> disponibili = ListaVeicolo.this.controller.getVeicoliDisponibili();
                 if(disponibili != null){
                     tuttiVeicoli.addAll(disponibili);
                 }
-                List <Veicolo> noleggiati = controller.getVeicoliNoleggiati();
+                List <Veicolo> noleggiati = ListaVeicolo.this.controller.getVeicoliNoleggiati();
                 if(noleggiati != null) {
                     tuttiVeicoli.addAll(noleggiati);
                 }
-                List <Veicolo> manutenzione = controller.getVeicoliManutenzione();
+                List <Veicolo> manutenzione = ListaVeicolo.this.controller.getVeicoliManutenzione();
                 if(manutenzione != null){
                     tuttiVeicoli.addAll(manutenzione);
                 }
@@ -55,21 +56,21 @@ public class ListaVeicolo extends JFrame {
         disponibiliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List <Veicolo> lista = controller.getVeicoliDisponibili();
+                List <Veicolo> lista = ListaVeicolo.this.controller.getVeicoliDisponibili();
                 riempiTabella(lista, colonne);
             }
         });
         manutenzioneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List <Veicolo> lista = controller.getVeicoliManutenzione();
+                List <Veicolo> lista = ListaVeicolo.this.controller.getVeicoliManutenzione();
                 riempiTabella(lista, colonne);
             }
         });
         noleggiatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List <Veicolo> lista = controller.getVeicoliNoleggiati();
+                List <Veicolo> lista = ListaVeicolo.this.controller.getVeicoliNoleggiati();
                 riempiTabella(lista, colonne);
             }
         });
@@ -89,7 +90,7 @@ public class ListaVeicolo extends JFrame {
                     return;
                 }
                 try{
-                    controller.eliminaVeicolo(targa);
+                    ListaVeicolo.this.controller.eliminaVeicolo(targa);
                     JOptionPane.showMessageDialog(null, "Veicolo eliminato! ", "Successo", JOptionPane.INFORMATION_MESSAGE);
                     tuttiButton.doClick();
                 } catch (VeicoloNonTrovatoException eccezione) {

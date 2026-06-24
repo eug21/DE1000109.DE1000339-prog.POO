@@ -16,9 +16,10 @@ public class ListaResponsabili extends JFrame {
     private JButton eliminaSelezionatoButton;
     private JTable table1;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public ListaResponsabili(){
+    public ListaResponsabili(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Lista responsabili");
         setContentPane(listaResponsabili);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -31,7 +32,7 @@ public class ListaResponsabili extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Id Responsabile", "Nome", "Cognome", "Mail"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
-                List<Responsabile> lista = controller.getTuttiResponsabili();
+                List<Responsabile> lista = ListaResponsabili.this.controller.getTuttiResponsabili();
                 if(lista != null){
                     for (Responsabile r: lista){
                         modello.addRow(new Object[]{ r.getIdResponsabileID(),
@@ -59,7 +60,7 @@ public class ListaResponsabili extends JFrame {
                     return;
                 }
                 try{
-                    controller.eliminaResponsabile(idRes);
+                    ListaResponsabili.this.controller.eliminaResponsabile(idRes);
                     JOptionPane.showMessageDialog(null, "Responsabile eliminato con successo", "Responsabile eliminato", JOptionPane.INFORMATION_MESSAGE);
                     aggiornaListaButton.doClick();
 

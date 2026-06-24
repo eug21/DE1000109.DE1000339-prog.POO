@@ -17,15 +17,16 @@ public class CercaPerCliente extends JFrame {
     private JScrollPane scroll;
     private JTable tabContratti;
 
+    private Controller controller;
 
-    public CercaPerCliente() {
+    public CercaPerCliente(Controller controllerHome) {
+        this.controller = controllerHome;
         setTitle("Ricerca contratti per cliente");
         setContentPane(cercaPerCliente);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
 
-        Controller controller = new Controller();
 
         cercaButton.addActionListener(new ActionListener() {
             @Override

@@ -16,9 +16,10 @@ public class AggiungiResponsabile extends JFrame{
     private JTextField testoCognomeTextField;
     private JTextField testoMailTextField;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public AggiungiResponsabile(){
+    public AggiungiResponsabile(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Aggiungi un nuovo responsabile");
         setContentPane(aggiungiResponsabile);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

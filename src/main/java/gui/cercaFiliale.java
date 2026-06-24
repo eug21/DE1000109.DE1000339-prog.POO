@@ -20,14 +20,15 @@ public class cercaFiliale extends JFrame{
     private JTextField testoTelefonoTextField;
     private JButton salvaModificheButton;
 
-    public cercaFiliale(){
+    private Controller controller;
+
+    public cercaFiliale(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca Filiale");
         setContentPane(cercaFiliale);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-
-        Controller controller = new Controller();
         testoCAPTextField.setVisible(false);
         testoCittaTextField.setVisible(false);
         testoTelefonoTextField.setVisible(false);

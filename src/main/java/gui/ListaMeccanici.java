@@ -2,7 +2,6 @@ package gui;
 
 import controller.Controller;
 import exception.MeccanicoNonTrovatoException;
-import model.Filiale;
 import model.Meccanico;
 
 import javax.swing.*;
@@ -18,9 +17,10 @@ public class ListaMeccanici extends JFrame{
     private JTable tab;
     private JButton eliminaSelezionatoButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public ListaMeccanici(){
+    public ListaMeccanici(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Lista meccanici");
         setContentPane(lista);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -33,7 +33,7 @@ public class ListaMeccanici extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"ID Meccanico", "Nome", "Cognome"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
-                List<Meccanico> lista = controller.listaMeccanici();
+                List<Meccanico> lista = ListaMeccanici.this.controller.listaMeccanici();
                 if(lista != null){
                     for (Meccanico m: lista){
                         modello.addRow(new Object[]{ m.getIdMeccanico(),
@@ -61,7 +61,7 @@ public class ListaMeccanici extends JFrame{
                     return;
                 }
                 try {
-                    controller.eliminaMeccanico(idMec);
+                    ListaMeccanici.this.controller.eliminaMeccanico(idMec);
                     JOptionPane.showMessageDialog(null, "Meccanico eliminato con successo! ");
                     aggiornaListaButton.doClick();
                 } catch (MeccanicoNonTrovatoException eccezione){

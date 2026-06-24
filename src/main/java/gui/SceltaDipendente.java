@@ -11,10 +11,11 @@ public class SceltaDipendente extends JFrame{
     private JButton responsabileButton;
     private JButton meccanicoButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
 
-    public SceltaDipendente() {
+    public SceltaDipendente(Controller controllerHome) {
+        this.controller = controllerHome;
 
         setTitle("Seleziona un dipendente");
         setContentPane(sceltaDipendente);
@@ -24,7 +25,7 @@ public class SceltaDipendente extends JFrame{
         responsabileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneResponsabili frame = new GestioneResponsabili();
+                GestioneResponsabili frame = new GestioneResponsabili(controller);
                 frame.setVisible(true);
 
             }
@@ -32,7 +33,7 @@ public class SceltaDipendente extends JFrame{
         meccanicoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneMeccanico frame = new GestioneMeccanico();
+                GestioneMeccanico frame = new GestioneMeccanico(controller);
                 frame.setVisible(true);
 
             }

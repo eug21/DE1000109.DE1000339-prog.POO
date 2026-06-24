@@ -12,9 +12,10 @@ public class GestioneVeicoli extends JFrame {
     private JButton cercaVeicoloButton;
     private JButton listaVeicoliButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public GestioneVeicoli(){
+    public GestioneVeicoli(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Gestione Veicoli");
         setContentPane(gestioneVeicoli);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -24,7 +25,7 @@ public class GestioneVeicoli extends JFrame {
         aggiungiVeicoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AggiuntaVeicolo frame = new AggiuntaVeicolo();
+                AggiuntaVeicolo frame = new AggiuntaVeicolo(controller);
                 frame.setVisible(true);
 
             }
@@ -34,7 +35,7 @@ public class GestioneVeicoli extends JFrame {
         listaVeicoliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ListaVeicolo frame = new ListaVeicolo();
+                ListaVeicolo frame = new ListaVeicolo(controller);
                 frame.setVisible(true);
 
             }
@@ -44,7 +45,7 @@ public class GestioneVeicoli extends JFrame {
         cercaVeicoloButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaVeicolo frame = new CercaVeicolo();
+                CercaVeicolo frame = new CercaVeicolo(controller);
                 frame.setVisible(true);
 
             }

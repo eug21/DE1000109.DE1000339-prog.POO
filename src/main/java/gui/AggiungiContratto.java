@@ -34,13 +34,14 @@ public class AggiungiContratto extends JFrame {
     private JLabel cliente;
     private JLabel veicolo;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
     private Cliente clienteTrovato = null;
     private Veicolo veicoloTrovato = null;
     private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public AggiungiContratto() {
+    public AggiungiContratto(Controller controllerHome) {
+        this.controller = controllerHome;
         setTitle("Aggiungi Contratto");
         setContentPane(aggiungiContratto);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

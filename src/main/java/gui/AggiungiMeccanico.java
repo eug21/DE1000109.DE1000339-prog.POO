@@ -15,9 +15,10 @@ public class AggiungiMeccanico extends JFrame {
     private JTextField cognomeTextField;
     private JButton aggiungiButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public AggiungiMeccanico(){
+    public AggiungiMeccanico(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Aggiungi un meccanico");
         setContentPane(aggiungi);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -3,7 +3,6 @@ package gui;
 import controller.Controller;
 import exception.ClienteNonTrovatoException;
 import model.Cliente;
-import model.Filiale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,13 +16,16 @@ public class ListaClienti extends JFrame {
     private JButton eliminaClienteButton;
     private JTable tabellaClienti;
 
-    public ListaClienti() {
+    private Controller controller;
+
+    public ListaClienti(Controller controllerHome) {
+        this.controller = controllerHome;
         setTitle("Lista dei clienti");
         setContentPane(listaClienti);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-        Controller controller = new Controller();
+
 
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override

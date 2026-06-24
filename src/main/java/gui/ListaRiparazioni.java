@@ -1,9 +1,7 @@
 package gui;
 
 import controller.Controller;
-import exception.MeccanicoNonTrovatoException;
 import exception.RiparazioneNonTrovateException;
-import model.Filiale;
 import model.Riparazione;
 
 import javax.swing.*;
@@ -19,9 +17,10 @@ public class ListaRiparazioni extends JFrame {
     private JScrollPane scrool;
     private JTable table1;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public ListaRiparazioni(){
+    public ListaRiparazioni(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Lista riparazioni");
         setContentPane(lista);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -32,7 +31,7 @@ public class ListaRiparazioni extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Problema", "Costo stimato", "Targa", "Costo Finale", "Data riparazione"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
-                List<Riparazione> lista = controller.getTutteRiparazioni();
+                List<Riparazione> lista = ListaRiparazioni.this.controller.getTutteRiparazioni();
                 if(lista != null){
                     for (Riparazione r: lista){
                         modello.addRow(new Object[]{ r.getDescrizioneProblema(),
@@ -62,7 +61,7 @@ public class ListaRiparazioni extends JFrame {
                     return;
                 }
                 try {
-                    controller.chiudiRiparazioneVeicolo(targa,prezzo);
+                    ListaRiparazioni.this.controller.chiudiRiparazioneVeicolo(targa,prezzo);
                     JOptionPane.showMessageDialog(null, "Riparazione eliminata con successo! ");
                     aggiornaListaButton.doClick();
                 } catch (RiparazioneNonTrovateException eccezione){

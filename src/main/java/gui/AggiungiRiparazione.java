@@ -24,10 +24,11 @@ public class AggiungiRiparazione extends JFrame {
     private JTextField dataTextField;
     private JButton aggiungiButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
     private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public AggiungiRiparazione(){
+    public AggiungiRiparazione(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Aggiungi una riparazione");
         setContentPane(aggiungi);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

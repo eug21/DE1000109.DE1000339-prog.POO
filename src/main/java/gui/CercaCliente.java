@@ -18,8 +18,9 @@ public class CercaCliente extends  JFrame{
     private JButton cerca;
     private JButton rinnovoPatenteButton;
 
-    private Controller controller = new Controller();
-    public CercaCliente(){
+    private Controller controller;
+    public CercaCliente(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca Cliente");
         setContentPane(cercaCliente);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -98,7 +99,7 @@ public class CercaCliente extends  JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String patenteVecchia = numeroPatenteTesto.getText().trim().toUpperCase();
-                rinnovoPatente frame = new rinnovoPatente(patenteVecchia);
+                rinnovoPatente frame = new rinnovoPatente(patenteVecchia, controller);
                 frame.setVisible(true);
             }
         });

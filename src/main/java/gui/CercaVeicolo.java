@@ -19,9 +19,10 @@ public class CercaVeicolo extends JFrame {
     private JButton cercaButton;
     private JButton aggiornaStatoButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public CercaVeicolo(){
+    public CercaVeicolo(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca un veicolo");
         setContentPane(cercaVeicolo);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -17,13 +17,16 @@ public class ListaFiliali extends  JFrame{
     private JTable filialiTable;
     private JButton eliminaSelezionataButton;
 
-    public ListaFiliali() {
+    private Controller controller;
+
+    public ListaFiliali(Controller controllerHome) {
+        this.controller = controllerHome;
         setTitle("Lista filiali");
         setContentPane(listaFiliali);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
-         Controller controller = new Controller();
+
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

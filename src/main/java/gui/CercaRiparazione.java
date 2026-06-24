@@ -20,11 +20,12 @@ public class CercaRiparazione extends JFrame{
     private JTextField targaTextField;
     private JButton cercaButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
     private final SimpleDateFormat formatoDataItalia = new SimpleDateFormat("dd/MM/yyyy");
 
 
-    public CercaRiparazione(){
+    public CercaRiparazione(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca una riparazione");
         setContentPane(cerca);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -16,9 +16,10 @@ public class CercaMeccanico  extends JFrame{
     private JPanel cerca;
     private JButton aggiornaStatoButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public CercaMeccanico(){
+    public CercaMeccanico(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Cerca un meccanico");
         setContentPane(cerca);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

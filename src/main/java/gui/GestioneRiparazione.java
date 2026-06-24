@@ -12,9 +12,10 @@ public class GestioneRiparazione extends JFrame{
     private JButton cercaButton;
     private JButton listaButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public GestioneRiparazione(){
+    public GestioneRiparazione(Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("Scegli una opzione");
         setContentPane(gestioneRiparazione);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -23,21 +24,21 @@ public class GestioneRiparazione extends JFrame{
         aggiungiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AggiungiRiparazione frame = new AggiungiRiparazione();
+                AggiungiRiparazione frame = new AggiungiRiparazione(controller);
                 frame.setVisible(true);
             }
         });
         listaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ListaRiparazioni frame = new ListaRiparazioni();
+                ListaRiparazioni frame = new ListaRiparazioni(controller);
                 frame.setVisible(true);
             }
         });
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CercaRiparazione frame = new CercaRiparazione();
+                CercaRiparazione frame = new CercaRiparazione(controller);
                 frame.setVisible(true);
             }
         });

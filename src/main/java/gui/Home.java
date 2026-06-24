@@ -1,5 +1,7 @@
 package gui;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,11 +16,14 @@ public class Home {
     private JButton GESTIONERIPARAZIONIButton;
     private JButton GESTIONECONTRATTIButton;
 
+    private Controller controller;
+
     public Home() {
+        controller = new Controller();
         GESTIONECLIENTIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneClienti frame = new GestioneClienti();
+                GestioneClienti frame = new GestioneClienti(controller);
                 frame.setVisible(true);
 
             }
@@ -26,7 +31,7 @@ public class Home {
         GESTIONEDIPENDENTIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SceltaDipendente frame = new SceltaDipendente();
+                SceltaDipendente frame = new SceltaDipendente(controller);
                 frame.setVisible(true);
 
             }
@@ -34,28 +39,28 @@ public class Home {
         GESTIONEFILIALIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneFiliali frame = new GestioneFiliali();
+                GestioneFiliali frame = new GestioneFiliali(controller);
                 frame.setVisible(true);
             }
         });
         GESTIONEVEICOLIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneVeicoli frame = new GestioneVeicoli();
+                GestioneVeicoli frame = new GestioneVeicoli(controller);
                 frame.setVisible(true);
             }
         });
         GESTIONERIPARAZIONIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneRiparazione frame = new GestioneRiparazione();
+                GestioneRiparazione frame = new GestioneRiparazione(controller);
                 frame.setVisible(true);
             }
         });
         GESTIONECONTRATTIButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GestioneContratti frame = new GestioneContratti();
+                GestioneContratti frame = new GestioneContratti(controller);
                 frame.setVisible(true);
             }
         });

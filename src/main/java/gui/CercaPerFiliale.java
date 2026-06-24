@@ -18,9 +18,10 @@ public class CercaPerFiliale extends JFrame{
     private JScrollPane scroll;
     private JTable tabContratti;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
-    public CercaPerFiliale() {
+    public CercaPerFiliale(Controller controllerHome) {
+        this.controller = controllerHome;
 
         setTitle("Cerca contratti per filiale");
         setContentPane(cercaPerFiliale);

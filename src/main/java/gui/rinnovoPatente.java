@@ -15,11 +15,12 @@ public class rinnovoPatente extends JFrame {
     private JButton confermaButton;
     private JButton annullaButton;
 
-    private Controller controller = new Controller();
+    private Controller controller; 
 
 
 
-    public rinnovoPatente(String vecchiaPatente){
+    public rinnovoPatente(String vecchiaPatente, Controller controllerHome){
+        this.controller = controllerHome;
         setTitle("PROCEDURA RINNOVO PATENTE");
         setContentPane(rinnovoPatente);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
