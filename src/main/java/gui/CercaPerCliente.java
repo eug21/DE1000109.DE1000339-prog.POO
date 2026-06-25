@@ -2,6 +2,8 @@ package gui;
 
 import controller.Controller;
 import exception.ClienteNonTrovatoException;
+import exception.ContrattoNonValidoException;
+import exception.VeicoloNonTrovatoException;
 import model.*;
 
 import javax.swing.*;
@@ -16,8 +18,11 @@ public class CercaPerCliente extends JFrame {
     private JButton cercaButton;
     private JScrollPane scroll;
     private JTable tabContratti;
+    private JButton chiudiSelezionatoButton;
 
     private Controller controller;
+
+    private List <Contratto> contrattiDelCliente;
 
     public CercaPerCliente(Controller controllerHome) {
         this.controller = controllerHome;
@@ -44,7 +49,7 @@ public class CercaPerCliente extends JFrame {
 
                 try{
                     Cliente cliente = controller.ricercaPerPatente(patente);
-                    List <Contratto> contrattiDelCliente = controller.getContrattiCliente(cliente);
+                    contrattiDelCliente = controller.getContrattiCliente(cliente);
 
                     if(contrattiDelCliente == null || contrattiDelCliente.isEmpty()){
                         JOptionPane.showMessageDialog(null, "Il cliente non ha contratti", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -84,13 +89,48 @@ public class CercaPerCliente extends JFrame {
                                     porte,
                                     cilindrata,
                                     carico,
-                                    cliente.getTipoPatente()};
+                                    c.getPrezzo() + "€"};
                             modello.addRow(riga);
                         }
 
                     tabContratti.setModel(modello);
                 } catch (ClienteNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null,"Il cliente non esite", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+        chiudiSelezionatoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int riga = tabContratti.getSelectedRow();
+                if(riga == -1){
+                    JOptionPane.showMessageDialog(null, "Devi selezionare un contratto", "Attenzione",  JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                Contratto daChiudere = contrattiDelCliente.get(riga);
+                int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere il contratto ?", "Conferma", JOptionPane.YES_NO_OPTION);
+                if(conferma != JOptionPane.YES_OPTION){
+                    return;
+                }
+                try{
+                    controller.chiudiContratto(daChiudere);
+                    JOptionPane.showMessageDialog(null, "Contratto chiuso con successo", "Contratto chiuso", JOptionPane.INFORMATION_MESSAGE);
+
+
+                } catch (VeicoloNonTrovatoException eccezione){
+                    JOptionPane.showMessageDialog(null, "Il veicolo non e' stato trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (ContrattoNonValidoException eccezione){
+                    JOptionPane.showMessageDialog(null, "Il contratto non e' valido", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
                 catch (Exception eccezione){
                     // prendo l' errore dal trigger postgres

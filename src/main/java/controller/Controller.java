@@ -433,9 +433,14 @@ public class Controller {
             throw new ContrattoNonValidoException("Il contratto non e' valido. ");
         }
         Veicolo veicolo = cercaTarga(contratto.getTargaVeicolo());
+        if(veicolo == null){
+            throw new VeicoloNonTrovatoException("Il veicolo non esiste.");
+        }
+        if(veicolo.getStatoVeicolo() == StatoVeicolo.Disponibile){
+            throw new ContrattoNonValidoException("Il contratto e' già stato chiuso, il veicolo e' disponibile.");
+        }
         veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
         veicoloDAO.update(veicolo);
-        contrattoDAO.chiudi(contratto);
         return true;
     }
 

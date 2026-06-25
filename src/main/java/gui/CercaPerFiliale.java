@@ -1,9 +1,10 @@
 package gui;
 
 import controller.Controller;
+import exception.ContrattoNonValidoException;
 import exception.FilialeNonTrovataException;
-import model.Contratto;
-import model.Filiale;
+import exception.VeicoloNonTrovatoException;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,8 +18,11 @@ public class CercaPerFiliale extends JFrame{
     private JButton cercaButton;
     private JScrollPane scroll;
     private JTable tabContratti;
+    private JButton chiudiSelezionatoButton;
 
-    private Controller controller; 
+    private Controller controller;
+
+    private List <Contratto> contratti;
 
     public CercaPerFiliale(Controller controllerHome) {
         this.controller = controllerHome;
@@ -46,19 +50,45 @@ public class CercaPerFiliale extends JFrame{
 
                 try{
                     Filiale filiale = controller.cercaConIdFiliale(codice);
-                    List< Contratto > contratti = controller.getContrattiFiliale(filiale);
+                    contratti = controller.getContrattiFiliale(filiale);
 
                     if(contratti == null || contratti.isEmpty()){
                         JOptionPane.showMessageDialog(null, "La filiale non presenta contratti", "" , JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-                    String [] colonne = {"Filiale Ritiro", "Targa", "Data Inizio", "Data Fine", "Prezzo"};
+                    String [] colonne = {"Filiale Ritiro", "Filiale Consegna", "Targa","Marca", "Modello", "Porte", "Cilindrata", "Carico", "Data Inizio", "Data Fine", "Prezzo"};
                     DefaultTableModel modello = new DefaultTableModel(null, colonne);
                     for (Contratto c : contratti){
+                        String targa = c.getTargaVeicolo();
+                        String marca = null;
+                        String modelloV = null;
+                        String porte = null;
+                        String carico = null;
+                        String cilindrata = null;
+                        try {
+                            Veicolo veicolo = controller.cercaTarga(targa);
+                            marca = veicolo.getMarca();
+                            modelloV = veicolo.getModello();
+                            if (veicolo instanceof Auto) {
+                                porte = String.valueOf(((Auto) veicolo).getNumeroPorte());
+                            } else if (veicolo instanceof Moto) {
+                                cilindrata = String.valueOf(((Moto) veicolo).getCilindrata());
+                            } else if (veicolo instanceof Furgone) {
+                                carico = String.valueOf(((Furgone) veicolo).getCapacitaCarico());
+                            }
+
+                        } catch (Exception exception) {
+                            JOptionPane.showMessageDialog(null, "Impossibile recuperare il veicolo" + targa, "Attenzione", JOptionPane.WARNING_MESSAGE);
+                        }
                         modello.addRow(new Object[]{
                                 c.getIdFilialeRitiro(),
                                 c.getIdFilialeConsegna(),
                                 c.getTargaVeicolo(),
+                                marca,
+                                modelloV,
+                                porte,
+                                cilindrata,
+                                carico,
                                 c.getDataInizio(),
                                 c.getDataFine(),
                                 c.getPrezzo() + "€"
@@ -74,6 +104,40 @@ public class CercaPerFiliale extends JFrame{
                         messaggioErrore = eccezione.getCause().getMessage();
                     }
                     JOptionPane.showMessageDialog(null,"Errore",  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        chiudiSelezionatoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int riga = tabContratti.getSelectedRow();
+                if(riga == -1){
+                    JOptionPane.showMessageDialog(null, "Devi selezionare un contratto", "Attenzione",  JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                Contratto daChiudere = contratti.get(riga);
+                int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere il contratto ?", "Conferma", JOptionPane.YES_NO_OPTION);
+                if(conferma != JOptionPane.YES_OPTION){
+                    return;
+                }
+                try{
+                    controller.chiudiContratto(daChiudere);
+                    JOptionPane.showMessageDialog(null, "Contratto chiuso con successo", "Contratto chiuso", JOptionPane.INFORMATION_MESSAGE);
+
+
+                } catch (VeicoloNonTrovatoException eccezione){
+                    JOptionPane.showMessageDialog(null, "Il veicolo non e' stato trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                } catch (ContrattoNonValidoException eccezione){
+                    JOptionPane.showMessageDialog(null, "Il contratto non e' valido", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

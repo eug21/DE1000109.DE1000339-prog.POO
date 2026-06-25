@@ -1,9 +1,10 @@
 package gui;
 
 import controller.Controller;
-import exception.ClienteNonTrovatoException;
 import exception.ContrattoNonValidoException;
-import model.Contratto;
+import exception.DateContrattoNonValideException;
+import exception.VeicoloNonTrovatoException;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,11 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class CercaPerDate extends JFrame{
     private JPanel cercaPerDate;
-    private JButton aggiornaListaButton;
-    private JButton eliminaContrattoButton;
+    private JButton cerca;
+    private JButton chiudi;
     private JScrollPane scroll;
     private JTable tabContratti;
     private JTextField inizioTextField;
@@ -23,6 +25,7 @@ public class CercaPerDate extends JFrame{
 
     private Controller controller; 
     private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private List <Contratto> contratti;
 
 
     public CercaPerDate(Controller controllerHome){
@@ -33,18 +36,87 @@ public class CercaPerDate extends JFrame{
         pack();
         setLocationRelativeTo(null);
 
-        aggiornaListaButton.addActionListener(new ActionListener() {
+        cerca.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String [] colonne = { controller.contrattiPerPeriodo(LocalDate.parse(inizioTextField.getText().trim(), formatoDataItalia), LocalDate.parse(fineTextField.getText().trim(), formatoDataItalia)) + "Filiale Consegna"  + "Data Fine" + "Prezzo"};
-                Object[][] righe = {};
 
-                tabContratti.setModel(new DefaultTableModel(righe, colonne));
+               LocalDate dataInizio = LocalDate.parse(inizioTextField.getText().trim(), formatoDataItalia);
+               LocalDate dataFine = LocalDate.parse(fineTextField.getText().trim(), formatoDataItalia);
+
+               if(dataInizio.isAfter(dataFine)){
+                   JOptionPane.showMessageDialog(null, "La data inzial non può essere successiva alla data finale", "Errore", JOptionPane.ERROR_MESSAGE);
+                   return;
+               }
+
+               if(dataInizio == null || dataFine == null){
+                   JOptionPane.showMessageDialog(null, "Compila i campi.", "Errore", JOptionPane.ERROR_MESSAGE);
+                   return;
+               }
+               try{
+                   contratti = controller.contrattiPerPeriodo(dataInizio, dataFine);
+                   if(contratti == null || contratti.isEmpty()){
+                       JOptionPane.showMessageDialog(null, "Il periodo non presenta contratti", "" , JOptionPane.WARNING_MESSAGE);
+                       return;
+                   }
+                   String [] colonne = {"Data Inizio", "Data Fine", "Targa", "Prezzo", "Filiale Ritiro", "Filiale Consegna", "Marca", "Modello", "Porte", "Cilindrata", "Carico"};
+                   DefaultTableModel modello = new DefaultTableModel(null, colonne);
+                   for(Contratto c : contratti){
+                       String targa = c.getTargaVeicolo();
+                       String marca = null;
+                       String modelloV = null;
+                       String porte = null;
+                       String carico = null;
+                       String cilindrata = null;
+                       try {
+                           Veicolo veicolo = controller.cercaTarga(targa);
+                           marca = veicolo.getMarca();
+                           modelloV = veicolo.getModello();
+                           if (veicolo instanceof Auto) {
+                               porte = String.valueOf(((Auto) veicolo).getNumeroPorte());
+                           } else if (veicolo instanceof Moto) {
+                               cilindrata = String.valueOf(((Moto) veicolo).getCilindrata());
+                           } else if (veicolo instanceof Furgone) {
+                               carico = String.valueOf(((Furgone) veicolo).getCapacitaCarico());
+                           }
+                       }catch (Exception exception) {
+                           JOptionPane.showMessageDialog(null, "Impossibile recuperare il veicolo" + targa, "Attenzione", JOptionPane.WARNING_MESSAGE);
+                       }
+                       modello.addRow(new Object[]{
+                               c.getDataInizio(),
+                               c.getDataFine(),
+                               c.getTargaVeicolo(),
+                               c.getPrezzo() + "€",
+                               c.getIdFilialeRitiro(),
+                               c.getIdFilialeConsegna(),
+                               marca,
+                               modelloV,
+                               porte,
+                               cilindrata,
+                               carico,
+
+
+                       });
+
+                   }
+                   tabContratti.setModel(modello);
+
+               } catch(DateContrattoNonValideException eccezione){
+                   JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+               }catch (Exception eccezione){
+                   // prendo l' errore dal trigger postgres
+                   String messaggioErrore = eccezione.getMessage();
+                   if(eccezione.getCause() != null){
+                       messaggioErrore = eccezione.getCause().getMessage();
+                   }
+                   JOptionPane.showMessageDialog(null,"Errore",  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+               }
+
             }
         });
 
 
-        eliminaContrattoButton.addActionListener(new ActionListener() {
+
+        chiudi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int riga = tabContratti.getSelectedRow();
@@ -53,22 +125,28 @@ public class CercaPerDate extends JFrame{
                     return;
                 }
 
-                int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere eliminare il contratto ?", "Conferma", JOptionPane.YES_NO_OPTION);
+                Contratto daChiudere = contratti.get(riga);
+                int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere il contratto ?", "Conferma", JOptionPane.YES_NO_OPTION);
                 if(conferma != JOptionPane.YES_OPTION){
                     return;
                 }
-                int modelRow = tabContratti.convertRowIndexToModel(riga);
-                //Contratto contratto = tabContratti.get(modelRow);
-                Contratto contratto = null;
                 try{
-                    controller.chiudiContratto(contratto);
-                    JOptionPane.showMessageDialog(null, "Contratto eliminato con successo", "Contratto eliminato", JOptionPane.INFORMATION_MESSAGE);
-                    aggiornaListaButton.doClick();
+                    controller.chiudiContratto(daChiudere);
+                    JOptionPane.showMessageDialog(null, "Contratto chiuso con successo", "Contratto chiuso", JOptionPane.INFORMATION_MESSAGE);
 
+
+                } catch (VeicoloNonTrovatoException eccezione){
+                    JOptionPane.showMessageDialog(null, "Il veicolo non e' stato trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 } catch (ContrattoNonValidoException eccezione){
-                    JOptionPane.showMessageDialog(null, "Il contratto non e' stato trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
-                } catch(Exception eccezione){
-                    JOptionPane.showMessageDialog(null, "Errore", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Il contratto non e' valido", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione){
+                    // prendo l' errore dal trigger postgres
+                    String messaggioErrore = eccezione.getMessage();
+                    if(eccezione.getCause() != null){
+                        messaggioErrore = eccezione.getCause().getMessage();
+                    }
+                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

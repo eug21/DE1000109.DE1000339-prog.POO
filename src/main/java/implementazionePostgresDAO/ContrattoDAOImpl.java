@@ -42,18 +42,7 @@ public class ContrattoDAOImpl implements ContrattoDAO {
         }
     }
 
-    @Override
-    public void chiudi(Contratto contratto) {
-        String sql = "DELETE FROM Contratto WHERE targaVeicolo = ?";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, contratto.getTargaVeicolo());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Impossibile chiudere il contratto.", e);
-        }
 
-    }
 
     @Override
     public List<Contratto> trovaPerCliente(String numeroPatente) {
@@ -96,7 +85,7 @@ public class ContrattoDAOImpl implements ContrattoDAO {
 
     @Override
     public List<Contratto> trovaPerPeriodo(LocalDate dataInizio, LocalDate dataFine) {
-        String sql = "SELECT * FROM Contratto WHERE dataInizio >= ? AND dataFine <= ?";
+        String sql = "SELECT * FROM Contratto WHERE dataFine <= ? AND dataInizio >= ? ";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setDate(1, Date.valueOf(dataInizio));
@@ -115,6 +104,6 @@ public class ContrattoDAOImpl implements ContrattoDAO {
     }
 
     private Contratto estraiResulContratto(ResultSet result) throws SQLException{
-        return new Contratto(result.getString("idFilialeRitiro"), result.getString("idFilialeConsegna"), result.getString("targaVeicolo"), result.getDate("dataInizio").toLocalDate(), result.getDate("dataFine").toLocalDate(), result.getBigDecimal("prezzo") );
+        return new Contratto(result.getString("idfilialeritiro"), result.getString("idfilialeconsegna"), result.getString("targa"), result.getDate("datainizio").toLocalDate(), result.getDate("datafine").toLocalDate(), result.getBigDecimal("prezzo") );
     }
 }
