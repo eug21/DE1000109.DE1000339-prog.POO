@@ -562,10 +562,14 @@ public class Controller {
      * @throws ResponsabileNonTrovatoException eccezione lanciata se non vi è alcuna corrispondenza tra il codice del responsabile fornito e il sistema, ciò significa che il responsabile non esiste.
      */
 //elimina un responsabile
-    public boolean eliminaResponsabile(String idResponsabile) throws ResponsabileNonTrovatoException {
+    public boolean eliminaResponsabile(String idResponsabile) throws ResponsabileNonTrovatoException, ResponsabileNonDisponibileException {
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {
             throw new ResponsabileNonTrovatoException("Il responsabile non esiste" + idResponsabile);
+        }
+        String verificaFiliale = responsabileDAO.ottieniFiliale(idResponsabile);
+        if(verificaFiliale != null){
+            throw new ResponsabileNonDisponibileException("Il responsabile non e' disponibile");
         }
       responsabileDAO.delete(idResponsabile);
         return true;
@@ -591,11 +595,15 @@ public class Controller {
      * @throws FilialeNonTrovataException      the filiale non trovata exception
      */
 //assegna un responsabile a una filiale
-    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException {
+    public boolean assegnaResponsabileAFiliale(String idResponsabile, String codiceFiliale) throws ResponsabileNonTrovatoException, FilialeNonTrovataException ,ResponsabileNonDisponibileException{
 
         Responsabile responsabile = cercaResponsabile(idResponsabile);
         if (responsabile == null) {
             throw new ResponsabileNonTrovatoException("Il responsabile non esiste" + idResponsabile);
+        }
+        String verificaFiliale = responsabileDAO.ottieniFiliale(idResponsabile);
+        if(verificaFiliale != null){
+            throw new ResponsabileNonDisponibileException("Il responsabile non e' disponibile");
         }
         Filiale filiale = cercaConIdFiliale(codiceFiliale);
         if (filiale == null) {
@@ -650,6 +658,11 @@ public class Controller {
         if(!successo){
             throw new ResponsabileNonTrovatoException("Il responsabile non esiste.");
         }
+    }
+
+    //ricava il codice filiale del responsabile mediante il dao
+    public String filialeResponsabile (String idResponsabile){
+        return responsabileDAO.ottieniFiliale(idResponsabile);
     }
 
     //metodi  per meccanico
@@ -741,24 +754,25 @@ public class Controller {
      *
      * @param targaVeicolo  targa veicolo
      * @param costoFinale   costo finale
+     * @param data data
      * @return  boolean
      * @throws RiparazioneNonTrovateException    eccezione lanciata se non vi è alcuna corrispondenza tra la targa del veicolo e il sistema, ciò vuol dire che il veicolo non è in riparazione attualmente.
      * @throws DatiRiparazioneNonValidiException eccezione lanciata se i dati inseriti della riparazione non sono validi, previa verifica.
      */
 //chiude la riparazione e aggiorna lo stato del veicolo
-    public boolean chiudiRiparazioneVeicolo( String targaVeicolo, float costoFinale) throws RiparazioneNonTrovateException, DatiRiparazioneNonValidiException {
+    public boolean chiudiRiparazioneVeicolo( String targaVeicolo, float costoFinale, Date data) throws RiparazioneNonTrovateException, DatiRiparazioneNonValidiException {
 
         if (targaVeicolo == null || targaVeicolo.isBlank() || costoFinale < 0) {
             throw new DatiRiparazioneNonValidiException("I dati non sono validi");
         }
-       Riparazione riparazione = cercaRiparazionePerTarga(targaVeicolo);
+       Riparazione riparazione = cercaRiparazionePerTarga(targaVeicolo , data);
         riparazione.setCostoFinale(costoFinale);
         Veicolo veicolo = cercaTarga(targaVeicolo);
         if(veicolo  != null){
             veicolo.setStatoVeicolo(StatoVeicolo.Disponibile);
             veicoloDAO.update(veicolo);
         }
-      riparazioneDAO.delete(targaVeicolo);
+      riparazioneDAO.update(riparazione);
         return true;
     }
 
@@ -781,9 +795,14 @@ public class Controller {
         }
         Riparazione riparazione = new Riparazione(costoStimato, descrizioneProblema,costoFinale, dataRiparazione,targaVeicolo);
         Veicolo veicolo = cercaTarga(targaVeicolo);
+        veicolo.setTarga(targaVeicolo);
+        if(veicolo.getStatoVeicolo() != StatoVeicolo.Disponibile){
+            throw new DatiRiparazioneNonValidiException("Il veicolo non e' disponibile.");
+        }
+        riparazioneDAO.save(riparazione);
         veicolo.setStatoVeicolo(StatoVeicolo.Manutenzione);
         veicoloDAO.update(veicolo);
-        riparazioneDAO.save(riparazione);
+
 
         return riparazione;
     }
@@ -796,11 +815,11 @@ public class Controller {
      * @throws DatiRiparazioneNonValidiException eccezione lanciata se i dati inseriti della riparazione non sono validi, previa verifica.
      * @throws RiparazioneNonTrovateException    eccezione lanciata se non vi è alcuna corrispondenza tra la targa del veicolo e il sistema, ciò vuol dire che il veicolo non è in riparazione attualmente.
      */
-    public Riparazione cercaRiparazionePerTarga(String targaVeicolo) throws DatiRiparazioneNonValidiException, RiparazioneNonTrovateException{
+    public Riparazione cercaRiparazionePerTarga(String targaVeicolo, Date data) throws DatiRiparazioneNonValidiException, RiparazioneNonTrovateException{
         if (targaVeicolo == null || targaVeicolo.isBlank()) {
             throw new DatiRiparazioneNonValidiException("La targa non è valida.");
         }
-        Riparazione riparazione = riparazioneDAO.cercaPerTarga(targaVeicolo);
+        Riparazione riparazione = riparazioneDAO.cercaPerTarga(targaVeicolo, data);
 
         if (riparazione == null) {
             throw new RiparazioneNonTrovateException("Riparazione non trovata");

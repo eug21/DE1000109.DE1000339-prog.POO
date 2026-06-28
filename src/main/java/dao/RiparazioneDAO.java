@@ -2,12 +2,13 @@ package dao;
 
 import model.Riparazione;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 public interface RiparazioneDAO {
     void save(Riparazione riparazione);
     boolean update(Riparazione riparazione);
     List<Riparazione> findAll();
-    Riparazione cercaPerTarga(String targa);
-    void delete(String targa);
+    Riparazione cercaPerTarga(String targa, java.util.Date data);
+
 }

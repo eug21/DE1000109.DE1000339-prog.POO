@@ -97,13 +97,9 @@ public class CercaPerFiliale extends JFrame{
                     tabContratti.setModel(modello);
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, "Filiale non trovata", "Errore", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,"Errore",  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         });
@@ -131,13 +127,9 @@ public class CercaPerFiliale extends JFrame{
                 } catch (ContrattoNonValidoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il contratto non e' valido", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                    catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
             }
         });

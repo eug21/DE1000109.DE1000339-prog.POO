@@ -80,19 +80,15 @@ public class CercaCliente extends  JFrame{
 
                 }
 
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
                     nomeTesto.setVisible(false);
                     cognomeTesto.setVisible(false);
                     fiscaleTesto.setVisible(false);
                     tipoTesto.setVisible(false);
-
                 }
+
+
             }
         });
         rinnovoPatenteButton.addActionListener(new ActionListener() {

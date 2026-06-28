@@ -46,12 +46,13 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
     @Override
     public boolean update(Riparazione riparazione) {
         String sql = "UPDATE Riparazione SET costoFinale=?, descrizioneProblema=? " +
-                "WHERE targaVeicolo = ?";
+                "WHERE targaVeicolo = ? AND dataRiparazione = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setFloat(1, riparazione.getCostoFinale());
             statement.setString(2, riparazione.getDescrizioneProblema());
             statement.setString(3, riparazione.getTargaVeicolo());
+            statement.setDate(4, new Date(riparazione.getDataRiparazione().getTime()));
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -60,18 +61,7 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
         return true;
     }
 
-    @Override
-    public void delete(String targa){
-        String sql = "DELETE FROM Riparazione WHERE targaVeicolo = ? ";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1,targa);
-            statement.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Impossibile eliminare la riparazione");
-        }
-    }
 
 
     @Override
@@ -91,10 +81,11 @@ public class RiparazioneDAOImpl implements RiparazioneDAO {
         return lista;
     }
     @Override
-    public Riparazione cercaPerTarga (String targa){
-        String sql = "SELECT * FROM Riparazione WHERE targaVeicolo = ?";
+    public Riparazione cercaPerTarga (String targa, java.util.Date data){
+        String sql = "SELECT * FROM Riparazione WHERE targaVeicolo = ? AND dataRiparazione = ? ORDER BY dataRiparazione DESC LIMIT 1 ";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, targa);
+            statement.setDate(2, new Date(data.getTime()));
             try(ResultSet result = statement.executeQuery()){
                 if(result.next()){
                     return estraiRiparazione(result);

@@ -84,13 +84,9 @@ public class CercaVeicolo extends JFrame {
 
                 }
 
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                catch (Exception eccezione) {
+                 JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
             }
         });
@@ -117,13 +113,9 @@ public class CercaVeicolo extends JFrame {
                 } catch (VeicoloNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Veicolo non trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                catch (Exception eccezione) {
+                JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
 
             }

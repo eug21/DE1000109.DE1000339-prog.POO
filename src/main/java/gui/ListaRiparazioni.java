@@ -1,7 +1,11 @@
 package gui;
 
 import controller.Controller;
+import exception.ContrattoNonValidoException;
+import exception.DatiRiparazioneNonValidiException;
 import exception.RiparazioneNonTrovateException;
+import exception.VeicoloNonTrovatoException;
+import model.Contratto;
 import model.Riparazione;
 
 import javax.swing.*;
@@ -17,7 +21,8 @@ public class ListaRiparazioni extends JFrame {
     private JScrollPane scrool;
     private JTable table1;
 
-    private Controller controller; 
+    private Controller controller;
+    private List <Riparazione> riparazioni;
 
     public ListaRiparazioni(Controller controllerHome){
         this.controller = controllerHome;
@@ -31,9 +36,9 @@ public class ListaRiparazioni extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String [] colonne = {"Problema", "Costo stimato", "Targa", "Costo Finale", "Data riparazione"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
-                List<Riparazione> lista = ListaRiparazioni.this.controller.getTutteRiparazioni();
-                if(lista != null){
-                    for (Riparazione r: lista){
+                riparazioni = controller.getTutteRiparazioni();
+                if(riparazioni != null){
+                    for (Riparazione r: riparazioni){
                         modello.addRow(new Object[]{ r.getDescrizioneProblema(),
                                 r.getCostoStimato(),
                                 r.getTargaVeicolo(),
@@ -47,33 +52,47 @@ public class ListaRiparazioni extends JFrame {
         chiudiSelezionataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int riga = table1.getSelectedRow();
-                if(riga == -1){
-                    JOptionPane.showMessageDialog(null, "Seleziona una riparazione da chiudere", "Attenzione" ,JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                String targa  = (String) table1.getValueAt(riga, 3);
-                Float prezzo = (Float)  table1.getValueAt(riga, 4);
-                int conferma  = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere questa riparazione su questo veicolo: " + targa + "?", "Eliminazione", JOptionPane.YES_NO_OPTION);
-
-                if(conferma != JOptionPane.YES_OPTION){
-                    return;
-                }
-                try {
-                    ListaRiparazioni.this.controller.chiudiRiparazioneVeicolo(targa,prezzo);
-                    JOptionPane.showMessageDialog(null, "Riparazione eliminata con successo! ");
-                    aggiornaListaButton.doClick();
-                } catch (RiparazioneNonTrovateException eccezione){
-                    JOptionPane.showMessageDialog(null, "La riparazione non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
-                } catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
+                    int riga = table1.getSelectedRow();
+                    if(riga == -1){
+                        JOptionPane.showMessageDialog(null, "Devi selezionare un contratto", "Attenzione",  JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
-                }
+
+                    Riparazione daChiudere = riparazioni.get(riga);
+                    if(daChiudere.getCostoFinale() > 0){
+                        JOptionPane.showMessageDialog(null, "Riparazione gia chiusa", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere chiudere la riparazione ?", "Conferma", JOptionPane.YES_NO_OPTION);
+                    if(conferma != JOptionPane.YES_OPTION){
+                        return;
+                    }
+
+                    String inputPrezzo = JOptionPane.showInputDialog(null, "Riparazione della targa: " + daChiudere.getTargaVeicolo() + ".\n Inserisci il costo finale della riparazione: ", "Chiusura riparazione", JOptionPane.QUESTION_MESSAGE);
+                    if(inputPrezzo == null || inputPrezzo.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Inserisci un costo per continuare", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    try{
+                       inputPrezzo =  inputPrezzo.replace(",", ".");
+                        float costoFinale = Float.parseFloat(inputPrezzo);
+                        if(costoFinale < 0){
+                            JOptionPane.showMessageDialog(null, "Costo non valido", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+                        controller.chiudiRiparazioneVeicolo(daChiudere.getTargaVeicolo(), costoFinale, daChiudere.getDataRiparazione());
+                        JOptionPane.showMessageDialog(null, "Riparazione chiusa con successo", "Riparazione chiusa", JOptionPane.INFORMATION_MESSAGE);
+                        aggiornaListaButton.doClick();
+
+                    } catch (RiparazioneNonTrovateException eccezione){
+                        JOptionPane.showMessageDialog(null, "La riparazione non e' stata trovata", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    } catch (DatiRiparazioneNonValidiException eccezione){
+                        JOptionPane.showMessageDialog(null, "Dati non validi", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    }
+                    catch (Exception eccezione) {
+                        JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
+                    }
             }
         });
         aggiornaListaButton.doClick();

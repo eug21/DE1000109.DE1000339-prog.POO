@@ -9,7 +9,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class CercaRiparazione extends JFrame{
     private JPanel cerca;
@@ -20,8 +23,8 @@ public class CercaRiparazione extends JFrame{
     private JTextField targaTextField;
     private JButton cercaButton;
 
-    private Controller controller; 
-    private final SimpleDateFormat formatoDataItalia = new SimpleDateFormat("dd/MM/yyyy");
+    private Controller controller;
+    private final DateTimeFormatter formatoDataItalia = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     public CercaRiparazione(Controller controllerHome){
@@ -34,8 +37,9 @@ public class CercaRiparazione extends JFrame{
 
         problemaTextField.setVisible(false);
         stimaTextField.setVisible(false);
-        dataTextField.setVisible(false);
+        dataTextField.setVisible(true);
         finaleTextField.setVisible(false);
+
         cercaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,17 +52,18 @@ public class CercaRiparazione extends JFrame{
                     JOptionPane.showMessageDialog(null, "Compila i campi", "Attenzione", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
+                LocalDate data = LocalDate.parse(dataTextField.getText().trim(), formatoDataItalia);
+                ZoneId defaultZ  = ZoneId.systemDefault();
+                Date dataParametro = Date.from(data.atStartOfDay(defaultZ).toInstant());
 
                 try{
-                    Riparazione riparazione = controller.cercaRiparazionePerTarga(targa);
+                    Riparazione riparazione = controller.cercaRiparazionePerTarga(targa,dataParametro );
                     problemaTextField.setVisible(true);
                     stimaTextField.setVisible(true);
-                    dataTextField.setVisible(true);
                     finaleTextField.setVisible(true);
                     problemaTextField.setText(riparazione.getDescrizioneProblema());
                     stimaTextField.setText(String.valueOf(riparazione.getCostoStimato()));
                     finaleTextField.setText(String.valueOf(riparazione.getCostoFinale()));
-                    dataTextField.setText(formatoDataItalia.format(riparazione.getDataRiparazione()));
 
                 } catch(RiparazioneNonTrovateException eccezione){
                     JOptionPane.showMessageDialog(null, "La riparazione non esiste", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -66,13 +71,9 @@ public class CercaRiparazione extends JFrame{
                     stimaTextField.setVisible(false);
                     dataTextField.setVisible(false);
                     finaleTextField.setVisible(false);
-                } catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
             }
         });

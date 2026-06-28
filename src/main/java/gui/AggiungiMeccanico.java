@@ -51,13 +51,9 @@ public class AggiungiMeccanico extends JFrame {
                     JOptionPane.showMessageDialog(null, "Meccanico aggiunto con successo", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 } catch (DatiMeccanicoNonValidiException eccezione){
                     JOptionPane.showMessageDialog(null, "Dati meccanico non valid", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-                    //trigger sql
-                    String messaggioErrore = ex.getMessage();
-                    if(ex.getCause() != null){
-                        messaggioErrore = ex.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null, "Errore durante il salvataggio", messaggioErrore, JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         });

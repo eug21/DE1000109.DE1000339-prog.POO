@@ -14,4 +14,5 @@ public interface ResponsabileDAO{
     boolean assegnaFiliale(String idResponsabile, String codiceFiliale);
     boolean rimuoviDaFiliale(String idResponsabile);
     boolean modificaEmail(String id, String email);
+    String ottieniFiliale(String idResponsabile);
 }

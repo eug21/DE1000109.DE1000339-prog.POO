@@ -1,6 +1,8 @@
 package gui;
 
 import controller.Controller;
+import exception.FilialeNonTrovataException;
+import exception.ResponsabileNonDisponibileException;
 import exception.ResponsabileNonTrovatoException;
 import model.Responsabile;
 
@@ -15,6 +17,7 @@ public class ListaResponsabili extends JFrame {
     private JButton aggiornaListaButton;
     private JButton eliminaSelezionatoButton;
     private JTable table1;
+    private JButton sollevaDaIncaricoButton;
 
     private Controller controller; 
 
@@ -30,15 +33,18 @@ public class ListaResponsabili extends JFrame {
         aggiornaListaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String [] colonne = {"Id Responsabile", "Nome", "Cognome", "Mail"};
+                String [] colonne = {"Id Responsabile", "Nome", "Cognome", "Mail", "Filiale"};
                 DefaultTableModel modello = new DefaultTableModel(null, colonne);
                 List<Responsabile> lista = ListaResponsabili.this.controller.getTuttiResponsabili();
                 if(lista != null){
                     for (Responsabile r: lista){
+                        String codiceFiliale = controller.filialeResponsabile(r.getIdResponsabileID());
                         modello.addRow(new Object[]{ r.getIdResponsabileID(),
                                 r.getNome(),
                                 r.getCognome(),
-                                r.getMail()});
+                                r.getMail(),
+                                codiceFiliale
+                        });
                     }
                 }
                 table1.setModel(modello);
@@ -66,16 +72,48 @@ public class ListaResponsabili extends JFrame {
 
                 } catch (ResponsabileNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il responsabile non e' stato trovato", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
-                }  catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                } catch (FilialeNonTrovataException eccezione){
+                    JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }catch(ResponsabileNonDisponibileException eccezione){
+                    JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
             }
         });
         aggiornaListaButton.doClick();
+        sollevaDaIncaricoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int riga = table1.getSelectedRow();
+                if(riga == -1){
+                    JOptionPane.showMessageDialog(null, "Devi selezionare un responsabile", "Attenzione",  JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                String idRes = (String) table1.getValueAt(riga, 0);
+                String codiceFiliale = (String) table1.getValueAt(riga, 4);
+                if(codiceFiliale.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Il responsabile non ha una filiale assegnata", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                int conferma = JOptionPane.showConfirmDialog(null, "Sei sicuro di volere sollevare il responsabile " + idRes +  " dal suo incarico ?", "Conferma", JOptionPane.YES_NO_OPTION);
+                if(conferma != JOptionPane.YES_OPTION){
+                    return;
+                }
+                try{
+                    controller.rimuoviResponsabileDaFiliale(idRes, codiceFiliale);
+                    JOptionPane.showMessageDialog(null, "Operazione conclusa con successo", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    aggiornaListaButton.doClick();
+                } catch(ResponsabileNonTrovatoException eccezione){
+                    JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+        });
     }
 }

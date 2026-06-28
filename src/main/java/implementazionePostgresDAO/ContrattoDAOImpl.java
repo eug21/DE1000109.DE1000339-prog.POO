@@ -85,7 +85,7 @@ public class ContrattoDAOImpl implements ContrattoDAO {
 
     @Override
     public List<Contratto> trovaPerPeriodo(LocalDate dataInizio, LocalDate dataFine) {
-        String sql = "SELECT * FROM Contratto WHERE dataFine <= ? AND dataInizio >= ? ";
+        String sql = "SELECT * FROM Contratto WHERE dataFine >= ? AND dataInizio <= ? ";
         List<Contratto> lista = new ArrayList<>();
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setDate(1, Date.valueOf(dataInizio));

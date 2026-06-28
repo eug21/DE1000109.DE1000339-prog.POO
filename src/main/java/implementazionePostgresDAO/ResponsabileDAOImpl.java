@@ -158,6 +158,25 @@ public class ResponsabileDAOImpl implements ResponsabileDAO{
         }
     }
 
+    @Override
+    public String ottieniFiliale(String idResponsabile){
+        String sql = "SELECT codiceFiliale FROM Responsabile WHERE idResponsabile = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, idResponsabile);
+            try(ResultSet result = statement.executeQuery()){
+                if(result.next()){
+                    String codice = result.getString("codiceFiliale");
+                    if(codice != null){
+                        return codice;
+                    }
+                }
+            }
+        } catch (SQLException exception){
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
     private Responsabile estraiResponsabile(ResultSet result) throws SQLException{
         return new Responsabile(
                 result.getString("idResponsabile"),

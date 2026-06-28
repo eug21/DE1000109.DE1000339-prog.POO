@@ -35,6 +35,7 @@ public class ListaVeicolo extends JFrame {
         tuttiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 List < Veicolo> tuttiVeicoli = new ArrayList<>();
                 List <Veicolo> disponibili = ListaVeicolo.this.controller.getVeicoliDisponibili();
                 if(disponibili != null){
@@ -99,13 +100,9 @@ public class ListaVeicolo extends JFrame {
                 } catch (VeicoloNonDisponibileException eccezione){
                     JOptionPane.showMessageDialog(null, "Veicolo non disponobile", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                catch (Exception eccezione) {
+                JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
             }
         });

@@ -97,14 +97,10 @@ public class CercaPerCliente extends JFrame {
                 } catch (ClienteNonTrovatoException eccezione){
                     JOptionPane.showMessageDialog(null,"Il cliente non esite", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
+                    catch (Exception eccezione) {
+                     JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                     }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
-                }
 
             }
         });
@@ -132,13 +128,9 @@ public class CercaPerCliente extends JFrame {
                 } catch (ContrattoNonValidoException eccezione){
                     JOptionPane.showMessageDialog(null, "Il contratto non e' valido", eccezione.getMessage(), JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                catch (Exception eccezione) {
+                 JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
 
             }

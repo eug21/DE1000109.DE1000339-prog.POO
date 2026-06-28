@@ -62,13 +62,9 @@ public class cercaFiliale extends JFrame{
                     salvaModificheButton.setVisible(true);
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, eccezione.getMessage(), "La filiale non esiste", JOptionPane.ERROR_MESSAGE);
-                }catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
 
 
@@ -104,14 +100,10 @@ public class cercaFiliale extends JFrame{
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, "Filiale non trovata", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-                catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
+                    catch (Exception eccezione) {
+                      JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                     }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
-                }
             }
         });
     }

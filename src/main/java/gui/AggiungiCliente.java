@@ -60,13 +60,9 @@ public class AggiungiCliente extends JFrame{
                     testoCodice.setText("");
                     testoNumeroP.setText("");
 
-                } catch (Exception eccezione){
-                    //recupero trigger
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null, "Errore!", messaggioErrore, JOptionPane.ERROR_MESSAGE);
+                } catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         });

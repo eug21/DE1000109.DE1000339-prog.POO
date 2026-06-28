@@ -34,6 +34,7 @@ public class AggiungiRiparazione extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        prezzpTextField.setEditable(false);
 
 
         aggiungiButton.addActionListener(new ActionListener() {
@@ -45,7 +46,7 @@ public class AggiungiRiparazione extends JFrame {
                     return;
                 }
                 String problema = problemaTextField.getText().trim();
-                Float prezzo = Float.valueOf(prezzpTextField.getText().trim());
+                Float prezzo = 0f;
                 Float stima = Float.valueOf(stimaTextField.getText().trim());
                 LocalDate data = LocalDate.parse(dataTextField.getText().trim(), formatoDataItalia);
                 ZoneId defaultZ  = ZoneId.systemDefault();
@@ -66,14 +67,9 @@ public class AggiungiRiparazione extends JFrame {
 
                 } catch (DatiRiparazioneNonValidiException eccezione){
                     JOptionPane.showMessageDialog(null, "Dati non validi", "Errore", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
-                    eccezione.printStackTrace();
+                } catch (Exception eccezione) {
+                    JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         });

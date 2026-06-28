@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import exception.FilialeNonTrovataException;
+import exception.ResponsabileNonDisponibileException;
 import exception.ResponsabileNonTrovatoException;
 
 import javax.swing.*;
@@ -53,13 +54,12 @@ public class AssegnaResFiliale  extends JFrame {
                     JOptionPane.showMessageDialog(null, "Il responsabile non esiste", "Errore", JOptionPane.ERROR_MESSAGE);
                 } catch (FilialeNonTrovataException eccezione){
                     JOptionPane.showMessageDialog(null, "La filiale non esiste", "Errore", JOptionPane.ERROR_MESSAGE);
-                }catch (Exception eccezione){
-                    // prendo l' errore dal trigger postgres
-                    String messaggioErrore = eccezione.getMessage();
-                    if(eccezione.getCause() != null){
-                        messaggioErrore = eccezione.getCause().getMessage();
-                    }
-                    JOptionPane.showMessageDialog(null,messaggioErrore,  "Errore in fase di inserimento", JOptionPane.ERROR_MESSAGE);
+                }catch (ResponsabileNonDisponibileException eccezione){
+                    JOptionPane.showMessageDialog(null, eccezione.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (Exception eccezione) {
+                     JOptionPane.showMessageDialog(null, "ERRORE", "Errore di sistema", JOptionPane.ERROR_MESSAGE);
+    
                 }
 
             }
